@@ -18,7 +18,7 @@
         "commands": [
             {
                 "command": "extension.testD3js",
-                "title": "Hello World"
+                "title": "TestD3Panel"
             }
         ]
     },
