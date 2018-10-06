@@ -19,8 +19,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     console.log(`Extension "testd3" is now active, running from ${context.extensionPath}.`);
 
+    let currentPanel : vscode.WebviewPanel | undefined = undefined;
+
     let disposable = vscode.commands.registerCommand('extension.testD3js', () => {
-       commandHandler();
+       currentPanel = createOrShowPanel(currentPanel);
     });
 
     context.subscriptions.push(disposable);
@@ -31,14 +33,24 @@ export function deactivate() {
     /* empty */
 }
 
-function commandHandler() {
-    // Open a webview
-    let panel = vscode.window.createWebviewPanel("testType",
-    "Panel display",
-    vscode.ViewColumn.Two
-    );
+function createOrShowPanel(_panel : vscode.WebviewPanel | undefined ) 
+: vscode.WebviewPanel
+{
+    let panel : vscode.WebviewPanel;
+    if (_panel == undefined) {
+        // Open a webview
+        panel = vscode.window.createWebviewPanel("testType",
+            "Panel display",
+            vscode.ViewColumn.Two
+        );
+    } else {
+        panel = _panel;
+    }
+
     panel.title = "Testing Panel";
     panel.webview.html = htmlContent;
+
     // Display a message box to the user
     vscode.window.showInformationMessage('[aspirational] displaying a d3-powered view!');
+    return panel;
 }
