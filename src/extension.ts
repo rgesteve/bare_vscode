@@ -4,9 +4,13 @@ import * as vscode from 'vscode';
 
 const htmlContent : string =`
 <!doctype html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="with=device-width, initial-scale=1.0">
+  </head>
   <body>
-    <h1>Testing...</h1>
+    <h1>Testing...(fixed metas in headers) </h1>
   </body>
 </html>
 `;
@@ -16,10 +20,6 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(`Extension "testd3" is now active, running from ${context.extensionPath}.`);
 
     let disposable = vscode.commands.registerCommand('extension.testD3js', () => {
-        /*
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Should be displaying a d3-powered view!');
-        */
        commandHandler();
     });
 
