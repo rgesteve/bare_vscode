@@ -62,6 +62,11 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
     <meta charset="utf-8">
     <meta name="viewport" content="with=device-width, initial-scale=1.0">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+    .bar-chart {
+        background-color : #c7d9d9;
+    }
+    </style>
   </head>
   <body>
     <h1>The kitten with scripts</h1>
@@ -79,6 +84,7 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
     </div>
 
     <h2>SVG visualization</h2>
+    <!--
     <div id="infovizDiv">
       <svg style="width:500px;height:500px;border:1px lightgray solid;">
         <path d="M 10,60 40,30 50,50 60,30 70,80" style="fill:black;stroke:gray;stroke-width:4px;" />
@@ -88,8 +94,9 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
             <circle cy="100" cx="200" r="30"/>
             <rect x="410" y="200" width="100" height="50" style="fill:pink;stroke:black;stroke-width:1px;" />
         </g>                                                                                                                                                                                                                                       </svg>                                                                                                                                                                                                                                     
-    </div>  
-
+    </div>
+    -->
+    <svg class="bar-chart"></svg>  
 
     <script>
     (function () {
@@ -109,8 +116,25 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
             }
         }, 500);
 
-        d3.select("div.vizdiv").append("span").text("from D3.js -- v4, testing");
-        //d3.select(".vizdiv").html("Hello World! <span>from D3.js (v4)</span>");
+        // trying the code from https://medium.freecodecamp.org/how-to-create-your-first-bar-chart-with-d3-js-a0e8ea2df386
+        let dataset = [80, 100, 56, 120, 180, 30, 40, 120, 160]; 
+        let svgWidth = 500;
+        let svgHeight = 300;
+        let barPadding = 5;
+        let barWidth = (svgWidth / dataset.length);
+
+        let svg = d3.select("svg").attr("width", svgWidth).attr("height", svgHeight);
+        let barChart = svg.selectAll("rect")
+                          .data(dataset)
+                          .enter()
+                          .append("rect")
+                          .attr("y", function(d) { return svgHeight - d; })
+                          .attr("height", function(d) { return d; } )
+                          .attr("width", function(d) { return barWidth - barPadding; })
+                          .attr("transform", function(d,i) {
+                            let translate = [ barWidth * i, 0];
+                            return "translate(" + translate + ")";
+                          });
 
         // Handle a message inside the webview
         window.addEventListener('message', event => {
