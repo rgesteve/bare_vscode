@@ -7,7 +7,7 @@ import * as fs from 'fs';
 export function activate(context: vscode.ExtensionContext) {
 
     let extensionPath = context.extensionPath;
-    let mediaPath = path.join(extensionPath, 'media');
+    let mediaPath = path.join(extensionPath, 'resources');
 
     console.log(`Extension "testd3" is now active, running from ${extensionPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
