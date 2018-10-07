@@ -11,14 +11,21 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.testD3js"
+        "onCommand:extension.testD3js",
+        "onCommand:extension.talkD3js"
     ],
     "main": "./out/extension",
     "contributes": {
         "commands": [
             {
+                "command": "extension.talkD3js",
+                "title": "TalktoD3Panel",
+                "category" : "TestWebview"
+            },
+            {
                 "command": "extension.testD3js",
-                "title": "TestD3Panel"
+                "title": "TesttoD3Panel",
+                "category" : "TestWebview"
             }
         ]
     },
