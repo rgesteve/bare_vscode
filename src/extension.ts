@@ -35,7 +35,8 @@ function createOrShowPanel(_panel : vscode.WebviewPanel | undefined, imgUri : vs
         // Open a webview
         panel = vscode.window.createWebviewPanel("testType",
             "Panel display",
-            vscode.ViewColumn.Two
+            vscode.ViewColumn.Two,
+            { enableScripts : true }
         );
     } else {
         panel = _panel;
@@ -60,6 +61,18 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
   <body>
     <h1>Testing...(fixed metas in headers) </h1>
     <img src="${imgUri}" width="300" />
+
+    <h2>Local lines counter</h2>
+    <div id="lines-of-code-counter">0</div>
+
+    <script>
+        const counter = document.getElementById("lines-of-code-counter");
+
+        let count = 0;
+        setInterval( () => {
+            counter.textContent = count++;
+        }, 100);
+    </script>
   </body>
 </html>
 `;
