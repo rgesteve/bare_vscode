@@ -1,69 +1,3 @@
-'use strict';
-
-import * as vscode from 'vscode';
-import * as path from 'path';
-import * as fs from 'fs';
-
-export function activate(context: vscode.ExtensionContext) {
-
-    let extensionPath = context.extensionPath;
-    let mediaPath = path.join(extensionPath, 'resources');
-
-    console.log(`Extension "testd3" is now active, running from ${extensionPath}.`);
-    console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
-
-    let kittenPath = vscode.Uri.file(path.join(mediaPath, 'kitten.jpg')).with({ scheme : 'vscode-resource'});
-
-    let currentPanel : vscode.WebviewPanel | undefined = undefined;
-
-    let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
-       if (currentPanel) {
-         currentPanel.reveal(vscode.ViewColumn.Two);
-       } else {
-         currentPanel = vscode.window.createWebviewPanel("testType", "Panel display", vscode.ViewColumn.Two, { enableScripts : true } );
-         currentPanel.title = "Testing Panel";
-         //currentPanel.webview.html = getHtmlContent(kittenPath);
-        currentPanel.webview.html = getHtmlContent2(extensionPath);
-
-         currentPanel.onDidDispose(
-             () => { currentPanel = undefined; },
-             undefined,
-             context.subscriptions
-         );
-         currentPanel.webview.onDidReceiveMessage(msg => {
-            vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
-         }, undefined, context.subscriptions);
-       }
-       // Display a message box to the user
-       vscode.window.showInformationMessage('[aspirational] displaying a d3-powered view!');
-    });
-
-    let talkPanelDisposable = vscode.commands.registerCommand("extension.talkD3js", () => {
-        if (!currentPanel) {
-            vscode.window.showInformationMessage('Need to have the webview open');
-        } else {
-            vscode.window.showInformationMessage('Sending a message to the webview');
-            currentPanel.webview.postMessage({ command : 'refactor'});
-        }
-    });
-
-    context.subscriptions.push(createPanelDisposable);
-    context.subscriptions.push(talkPanelDisposable);
-}
-
-// this method is called when your extension is deactivated
-export function deactivate() {
-    /* empty */
-}
-
-function getHtmlContent2(extensionPath : string) : string {
-    let resourcePath = path.join(extensionPath, 'resources');
-    let html = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
-    return html;
-}
-
-function getHtmlContent(imgUri : vscode.Uri) : string {
-    let htmlContent : string =`
 <!doctype html>
 <html lang="en">
   <head>
@@ -77,8 +11,11 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
     </style>
   </head>
   <body>
+      <!--
     <h1>The kitten with scripts</h1>
     <img src="${imgUri}" width="300" />
+    -->
+    <h1>This is the version of the content in a file</h1>
 
     <h2>Local lines counter</h2>
     <div id="lines-of-code-counter">0</div>
@@ -154,6 +91,3 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
     </script>
   </body>
 </html>
-`;
-    return htmlContent;
-}
