@@ -61,6 +61,7 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="with=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
   </head>
   <body>
     <h1>The kitten with scripts</h1>
@@ -72,6 +73,11 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
     <h2>Latest communication from host</h2>
     <div id="latest-comm"></div>
 
+    <h2>Visualization</h2>
+    <div class="vizdiv">
+         Hello World!
+    </div>
+
     <script>
     (function () {
         const vscode = acquireVsCodeApi();
@@ -81,7 +87,7 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
         let count = 0;
         setInterval( () => {
             counter.textContent = count++;
-            if ((count % 25) === 0) {
+            if ((count % 250) === 0) {
                 console.log("Sending a message to the host...");
                 vscode.postMessage({
                     command: 'alert',
@@ -89,6 +95,9 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
                 });
             }
         }, 500);
+
+        d3.select("div.vizdiv").append("span").text("from D3.js -- v4, testing");
+        //d3.select(".vizdiv").html("Hello World! <span>from D3.js (v4)</span>");
 
         // Handle a message inside the webview
         window.addEventListener('message', event => {
