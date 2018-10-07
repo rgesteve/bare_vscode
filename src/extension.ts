@@ -16,7 +16,21 @@ export function activate(context: vscode.ExtensionContext) {
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
 
     let disposable = vscode.commands.registerCommand('extension.testD3js', () => {
-       currentPanel = createOrShowPanel(currentPanel, kittenPath);
+       //currentPanel = createOrShowPanel(currentPanel, kittenPath);
+       if (currentPanel) {
+         currentPanel.reveal(vscode.ViewColumn.Two);
+       } else {
+         currentPanel = vscode.window.createWebviewPanel("testType", "Panel display", vscode.ViewColumn.Two, { enableScripts : true } );
+         currentPanel.title = "Testing Panel";
+         currentPanel.webview.html = getHtmlContent(kittenPath);
+         currentPanel.onDidDispose(
+             () => { currentPanel = undefined; },
+             undefined,
+             context.subscriptions
+         );
+       }
+       // Display a message box to the user
+       vscode.window.showInformationMessage('[aspirational] displaying a d3-powered view!');
     });
 
     context.subscriptions.push(disposable);
@@ -25,29 +39,6 @@ export function activate(context: vscode.ExtensionContext) {
 // this method is called when your extension is deactivated
 export function deactivate() {
     /* empty */
-}
-
-function createOrShowPanel(_panel : vscode.WebviewPanel | undefined, imgUri : vscode.Uri ) 
-: vscode.WebviewPanel
-{
-    let panel : vscode.WebviewPanel;
-    if (_panel == undefined) {
-        // Open a webview
-        panel = vscode.window.createWebviewPanel("testType",
-            "Panel display",
-            vscode.ViewColumn.Two,
-            { enableScripts : true }
-        );
-    } else {
-        panel = _panel;
-    }
-
-    panel.title = "Testing Panel";
-    panel.webview.html = getHtmlContent(imgUri);
-
-    // Display a message box to the user
-    vscode.window.showInformationMessage('[aspirational] displaying a d3-powered view!');
-    return panel;
 }
 
 function getHtmlContent(imgUri : vscode.Uri) : string {
@@ -59,7 +50,7 @@ function getHtmlContent(imgUri : vscode.Uri) : string {
     <meta name="viewport" content="with=device-width, initial-scale=1.0">
   </head>
   <body>
-    <h1>Testing...(fixed metas in headers) </h1>
+    <h1>The kitten with scripts</h1>
     <img src="${imgUri}" width="300" />
 
     <h2>Local lines counter</h2>
