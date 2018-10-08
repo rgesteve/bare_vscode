@@ -83,8 +83,17 @@ function getHtmlContent(extensionPath : string, _imgUri: vscode.Uri) : string {
     let resourcePath = path.join(extensionPath, 'resources');
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
 
+    const columns = [
+                    ['KindofOpen', 4],
+                    ['Closedx', 2],
+                    ['InProgress', 2],
+                    ['Testing', 5],
+                    ['Other', 1],
+    ];
+
     let result = interpolateTemplate(htmlTemplate, {
-        imgUri: _imgUri                                                                                                                                                            
+        imgUri: _imgUri,
+        columnsFromHost : JSON.stringify(columns) // kind of stupid, but haven't found a better way yet
     });
 
     return result;
