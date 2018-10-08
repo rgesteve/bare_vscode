@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as cp from 'child_process';
 
 // utilities
 function interpolateTemplate(template: string, params : Object) {
@@ -95,7 +96,27 @@ class D3Extension
 
     testOutput(message : string) : void {
         this._output.clear();
-        this._output.appendLine(`Received a message: ${message}.`);
+        let channel : vscode.OutputChannel = this._output;
+        let errString : string = "";
+
+        let p = cp.spawn('ping', []);
+        p.stdout.on("data", (data : string | Buffer) : void => {
+            channel.append(data.toString());
+        });
+        p.stderr.on("data", (data : string | Buffer) : void => {
+            errString += data.toString();
+            channel.append(data.toString());
+        });
+
+        p.on('exit', (exitCode : number) : void => {
+            if (exitCode != 0) {
+                vscode.window.showInformationMessage("Ping concluded");
+            } else {
+                vscode.window.showErrorMessage(`ping finished with error ${errString}.`);
+            }
+        });
+
+        // this._output.appendLine(`Received a message: ${message}.`);
     }
 
     dispose() : void {
