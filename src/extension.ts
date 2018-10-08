@@ -14,6 +14,17 @@ function interpolateTemplate(template: string, params : Object) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+    let profilerDriverPath : string | undefined = undefined;
+    if (process.env["USERPROFILE"] !== undefined) {
+        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Projects", "ExternalProfilerDriver",
+                "ExternalProfilerDriver","ExternalProfilerDriver","bin","Debug","ExternalProfilerDriver.exe");
+        if (! fs.existsSync(profilerDriverPath)) {
+            console.log("Cannot find path to external profiler driver");
+        } else {
+            console.log("Found the profiler driver!");
+
+        }
+    }
 
     let extensionPath = context.extensionPath;
     let mediaPath = path.join(extensionPath, 'resources');
@@ -24,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(`Extension "testd3" is now active, running from ${extensionPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
 
-    let kittenPath = vscode.Uri.file(path.join(mediaPath, 'kitten.jpg')).with({ scheme : 'vscode-resource'});
+    //let kittenPath = vscode.Uri.file(path.join(mediaPath, 'kitten.jpg')).with({ scheme : 'vscode-resource'});
 
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
 
@@ -34,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
        } else {
          currentPanel = vscode.window.createWebviewPanel("testType", "Panel display", vscode.ViewColumn.Two, { enableScripts : true } );
          currentPanel.title = "Testing Panel";
-         currentPanel.webview.html = getHtmlContent(extensionPath, kittenPath);
+         currentPanel.webview.html = getHtmlContent(extensionPath);
 
          currentPanel.onDidDispose(
              () => { currentPanel = undefined; },
@@ -45,8 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
          }, undefined, context.subscriptions);
        }
-       // Display a message box to the user
-       vscode.window.showInformationMessage('[aspirational] displaying a d3-powered view!');
+       vscode.window.showInformationMessage('Displaying a d3-powered view!');
     });
 
     let talkPanelDisposable = vscode.commands.registerCommand("extension.talkD3js", () => {
@@ -59,8 +69,12 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let invokePanelDisposable = vscode.commands.registerCommand("extension.invokeD3js", () => {
-        vscode.window.showInformationMessage("Should've started invoking command");
-        d3Extension.testOutput("Trying to output to channel");
+        // d3Extension.testOutput("Trying to output to channel");
+        if (process.env["USERPROFILE"] !== undefined) {
+            vscode.window.showInformationMessage(`The env variable is: ${process.env["USERPROFILE"]}.`);
+        } else {
+            vscode.window.showErrorMessage("Couldn't find environment variable");
+        }
     });
 
     let calltestPanelDisposable = vscode.commands.registerCommand("extension.calltestD3js", () => {
@@ -79,7 +93,7 @@ export function deactivate() {
     /* empty */
 }
 
-function getHtmlContent(extensionPath : string, _imgUri: vscode.Uri) : string {
+function getHtmlContent(extensionPath : string) : string {
     let resourcePath = path.join(extensionPath, 'resources');
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
 
@@ -92,7 +106,6 @@ function getHtmlContent(extensionPath : string, _imgUri: vscode.Uri) : string {
     ];
 
     let result = interpolateTemplate(htmlTemplate, {
-        imgUri: _imgUri,
         columnsFromHost : JSON.stringify(columns) // kind of stupid, but haven't found a better way yet
     });
 
