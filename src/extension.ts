@@ -63,9 +63,15 @@ export function activate(context: vscode.ExtensionContext) {
         d3Extension.testOutput("Trying to output to channel");
     });
 
+    let calltestPanelDisposable = vscode.commands.registerCommand("extension.calltestD3js", () => {
+        vscode.window.showInformationMessage("Going to try to invoke the command");
+        vscode.commands.executeCommand("extension.testD3js");
+    });
+
     context.subscriptions.push(createPanelDisposable);
     context.subscriptions.push(talkPanelDisposable);
     context.subscriptions.push(invokePanelDisposable);
+    context.subscriptions.push(calltestPanelDisposable);
 }
 
 // this method is called when your extension is deactivated

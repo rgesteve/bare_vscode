@@ -13,7 +13,8 @@
     "activationEvents": [
         "onCommand:extension.testD3js",
         "onCommand:extension.talkD3js",
-        "onCommand:extension.invokeD3js"
+        "onCommand:extension.invokeD3js",
+        "onCommand:extension.calltestD3js"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -32,8 +33,12 @@
                 "command": "extension.invokeD3js",
                 "title": "InvokeD3Panel",
                 "category" : "TestWebview"
+            },
+            {
+                "command": "extension.calltestD3js",
+                "title": "CallTestD3Panel",
+                "category" : "TestWebview"
             }
-
         ]
     },
     "scripts": {
