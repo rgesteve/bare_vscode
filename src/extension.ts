@@ -99,7 +99,7 @@ class D3Extension
         let channel : vscode.OutputChannel = this._output;
         let errString : string = "";
 
-        let p = cp.spawn('ping', []);
+        let p = cp.spawn('ping', ['-n', '10', 'www.google.com']);
         p.stdout.on("data", (data : string | Buffer) : void => {
             channel.append(data.toString());
         });
@@ -109,7 +109,7 @@ class D3Extension
         });
 
         p.on('exit', (exitCode : number) : void => {
-            if (exitCode != 0) {
+            if (exitCode === 0) {
                 vscode.window.showInformationMessage("Ping concluded");
             } else {
                 vscode.window.showErrorMessage(`ping finished with error ${errString}.`);
