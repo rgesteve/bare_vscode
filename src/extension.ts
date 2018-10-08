@@ -22,14 +22,13 @@ export function activate(context: vscode.ExtensionContext) {
             console.log("Cannot find path to external profiler driver");
         } else {
             console.log("Found the profiler driver!");
-
         }
     }
 
     let extensionPath = context.extensionPath;
     let mediaPath = path.join(extensionPath, 'resources');
 
-    let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath);
+    let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, <string>(profilerDriverPath));
     context.subscriptions.push(d3Extension);
 
     console.log(`Extension "testd3" is now active, running from ${extensionPath}.`);
@@ -82,7 +81,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let invokePanelDisposable = vscode.commands.registerCommand("extension.invokeD3js", () => {
-        // d3Extension.testOutput("Trying to output to channel");
+        d3Extension.testOutput("Trying to output to channel");
         if (process.env["USERPROFILE"] !== undefined) {
             vscode.window.showInformationMessage(`The env variable is: ${process.env["USERPROFILE"]}.`);
         } else {
