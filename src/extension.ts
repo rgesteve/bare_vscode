@@ -16,6 +16,9 @@ export function activate(context: vscode.ExtensionContext) {
     let extensionPath = context.extensionPath;
     let mediaPath = path.join(extensionPath, 'resources');
 
+    let d3Extension : D3Extension = new D3Extension(extensionPath);
+    context.subscriptions.push(d3Extension);
+
     console.log(`Extension "testd3" is now active, running from ${extensionPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
 
@@ -53,8 +56,14 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    let invokePanelDisposable = vscode.commands.registerCommand("extension.invokeD3js", () => {
+        vscode.window.showInformationMessage("Should've started invoking command");
+        d3Extension.testOutput("Trying to output to channel");
+    });
+
     context.subscriptions.push(createPanelDisposable);
     context.subscriptions.push(talkPanelDisposable);
+    context.subscriptions.push(invokePanelDisposable);
 }
 
 // this method is called when your extension is deactivated
@@ -71,4 +80,25 @@ function getHtmlContent(extensionPath : string, _imgUri: vscode.Uri) : string {
     });
 
     return result;
+}
+
+class D3Extension
+{
+    private _output : vscode.OutputChannel;
+    private _rootPath : string;
+
+    constructor(rootPath : string) {
+        this._output = vscode.window.createOutputChannel("D3Extension");
+        this._rootPath = rootPath;
+        console.log("Created D3Extension instance");
+    }
+
+    testOutput(message : string) : void {
+        this._output.clear();
+        this._output.appendLine(`Received a message: ${message}.`);
+    }
+
+    dispose() : void {
+        this._output.dispose();
+    }
 }
