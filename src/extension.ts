@@ -40,6 +40,19 @@ export function activate(context: vscode.ExtensionContext) {
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
 
     let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
+       let textEditor = vscode.window.activeTextEditor;
+       if (!textEditor) {
+         vscode.window.showErrorMessage("No Python document selected.");
+         return;
+       } else {
+         let doc = textEditor.document;
+         if (!doc) {
+            vscode.window.showErrorMessage("Please invoke this command from a Python file.");
+            return;
+         } 
+         vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
+       }
+
        if (currentPanel) {
          currentPanel.reveal(vscode.ViewColumn.Two);
        } else {
