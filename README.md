@@ -27,6 +27,9 @@ To get started with this codebase it's useful to create a `node`-based developme
 (bare_vscode) > npm install
 ```
 6. Open Visual Studio Code (heretofore "vsc") and start working with the extension as described in the [official documentation](https://code.visualstudio.com/docs/extensions/overview)
+```
+(bare_vscode) > code .
+```
 
 ### Code Architecture
 
