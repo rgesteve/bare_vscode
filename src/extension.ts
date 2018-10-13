@@ -31,17 +31,18 @@ export function activate(context: vscode.ExtensionContext) {
     let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, <string>(profilerDriverPath));
     context.subscriptions.push(d3Extension);
 
-    console.log(`Extension "testd3" is now active, running from ${extensionPath}.`);
+    console.log(`Extension "callVTune" is now active, running from ${extensionPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
 
-    //let kittenPath = vscode.Uri.file(path.join(mediaPath, 'kitten.jpg')).with({ scheme : 'vscode-resource'});
+    //let localPath = vscode.Uri.file(path.join(mediaPath, 'kitten.jpg')).with({ scheme : 'vscode-resource'});
 
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
 
     let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
        let textEditor = vscode.window.activeTextEditor;
        if (!textEditor) {
-         vscode.window.showErrorMessage("No Python document selected.");
+         // TODO: Check for actual Python contents
+         vscode.window.showErrorMessage("No document selected.");
          return;
        } else {
          let doc = textEditor.document;
@@ -71,7 +72,9 @@ export function activate(context: vscode.ExtensionContext) {
        vscode.window.showInformationMessage('Displaying a d3-powered view!');
     });
 
+    // Communicating with the webview (this message is handled in the html javascript)
     let talkPanelDisposable = vscode.commands.registerCommand("extension.talkD3js", () => {
+        d3Extension.testOutput("Trying to output to channel"); // have output directed to a "channel" (these appear on the Debug Console)
         if (!currentPanel) {
             vscode.window.showInformationMessage('Need to have the webview open');
         } else {
@@ -80,15 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    let invokePanelDisposable = vscode.commands.registerCommand("extension.invokeD3js", () => {
-        d3Extension.testOutput("Trying to output to channel");
-        if (process.env["USERPROFILE"] !== undefined) {
-            vscode.window.showInformationMessage(`The env variable is: ${process.env["USERPROFILE"]}.`);
-        } else {
-            vscode.window.showErrorMessage("Couldn't find environment variable");
-        }
-    });
-
+    // this is an example of how an extension can invoke annother command, either from the same extension, from another or from the VSCode core
     let calltestPanelDisposable = vscode.commands.registerCommand("extension.calltestD3js", () => {
         vscode.window.showInformationMessage("Going to try to invoke the command");
         vscode.commands.executeCommand("extension.testD3js");
@@ -96,7 +91,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(createPanelDisposable);
     context.subscriptions.push(talkPanelDisposable);
-    context.subscriptions.push(invokePanelDisposable);
     context.subscriptions.push(calltestPanelDisposable);
 }
 

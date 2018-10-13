@@ -56,7 +56,6 @@ export class D3Extension
            }
        });
 
-
         // this._output.appendLine(`Received a message: ${message}.`);
     }
 
