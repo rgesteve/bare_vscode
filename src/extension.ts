@@ -101,8 +101,12 @@ export function deactivate() {
 
 function getHtmlContent(extensionPath : string) : string {
     let resourcePath = path.join(extensionPath, 'resources');
-    let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
+    //let datajson = fs.readFile(path.join(resourcePath, "/data/data2.json"), "utf8", 
+    //                function(err, contents){console.log(`data found ${contents}.`);});
 
+    let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
+    let datajson = fs.readFileSync(path.join(resourcePath, "/data/data2.json"), "utf8");
+    console.log(`data found ${datajson}.`);
     const columns = [
                     ['KindofOpen', 4],
                     ['Closedx', 2],
@@ -112,7 +116,8 @@ function getHtmlContent(extensionPath : string) : string {
     ];
 
     let result = interpolateTemplate(htmlTemplate, {
-        columnsFromHost : JSON.stringify(columns) // kind of stupid, but haven't found a better way yet
+        columnsFromHost : JSON.stringify(columns),// kind of stupid, but haven't found a better way yet
+        columnsFromHost2 : datajson
     });
 
     return result;

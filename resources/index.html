@@ -30,8 +30,10 @@
 
     <h2>c3 chart</h2>
     <div id="dataDiv" style="display: none;">${columnsFromHost}</div>
+    <div id="dataDiv2" style="display: none;">${columnsFromHost2}</div>
     <div id="visitor" style="height:290px; width:100%;"></div>
-
+    <div id="chart" style="height:290px; width:100%;"></div>
+    <div id="chart2" style="height:290px; width:100%;"></div>
     <h2>The table of functions</h2>
 
     <table id="table-profile">
@@ -78,7 +80,7 @@
         $("#table-profile").treetable({ expandable: true, initialState : "expanded" });
 
        let data = JSON.parse(document.getElementById("dataDiv").textContent);
-
+       let data2 = JSON.parse(document.getElementById("dataDiv2").textContent);
         // a second chart
         var chart = c3.generate({
             bindto: '#visitor',
@@ -112,7 +114,38 @@
             }
         });
 
-        // Handle a message inside the webview
+        var dataset = [ 5, 10, 15, 20, 25 ];
+        var chart = c3.generate({
+         bindto: '#chart',
+         data: {
+           columns: [
+             ['data1', 30, 200, 100, 400, 150, 250],
+             ['data2', 50, 20, 10, 40, 15, 25]
+           ],
+           axes: {
+             data2: 'y2' // ADD
+           }
+         },
+         axis: {
+           y2: {
+             show: true // ADD
+           }
+         }
+         });
+
+         var chart = c3.generate({
+            bindto: '#chart2',
+            data: {
+                json: data2
+            }
+        });
+         var dataset = [ 5, 10, 15, 14];
+        d3.select("body").selectAll("p")
+             .data(dataset)
+             .enter()
+             .append("p")
+             .text("New paragraph!");
+       //  Handle a message inside the webview
         window.addEventListener('message', event => {
             const message = event.data; // the message data the host sent
             commMsg.textContent = "Just received a message at time [" + count + "]";
