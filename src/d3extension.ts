@@ -6,12 +6,12 @@ import * as cp from 'child_process';
 export class D3Extension
 {
     private _output : vscode.OutputChannel;
-    private _rootPath : string;
+    // private _rootPath : string;
     private _profilerBinPath : string;
 
     constructor(rootPath : string, binPath : string) {
         this._output = vscode.window.createOutputChannel("D3Extension");
-        this._rootPath = rootPath;
+        // this._rootPath = rootPath;
         this._profilerBinPath = binPath;
         console.log("Created D3Extension instance");
     }
