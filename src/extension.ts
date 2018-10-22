@@ -27,14 +27,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     let extensionPath = context.extensionPath;
     let mediaPath = path.join(extensionPath, 'resources');
+    let svgPath = vscode.Uri.file(path.join(mediaPath, 'model2.svg')).with({ scheme : 'vscode-resource'});
 
     let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, <string>(profilerDriverPath));
     context.subscriptions.push(d3Extension);
 
     console.log(`Extension "callVTune" is now active, running from ${extensionPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
-
-    //let localPath = vscode.Uri.file(path.join(mediaPath, 'kitten.jpg')).with({ scheme : 'vscode-resource'});
 
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
 
@@ -58,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
        } else {
          currentPanel = vscode.window.createWebviewPanel("testType", "Panel display", vscode.ViewColumn.Two, { enableScripts : true } );
          currentPanel.title = "Testing Panel";
-         currentPanel.webview.html = getHtmlContent(extensionPath);
+         currentPanel.webview.html = getHtmlContent(extensionPath, svgPath);
 
          currentPanel.onDidDispose(
              () => { currentPanel = undefined; },
@@ -99,7 +98,7 @@ export function deactivate() {
     /* empty */
 }
 
-function getHtmlContent(extensionPath : string) : string {
+function getHtmlContent(extensionPath : string, modelPath: vscode.Uri) : string {
     let resourcePath = path.join(extensionPath, 'resources');
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
 
@@ -112,7 +111,8 @@ function getHtmlContent(extensionPath : string) : string {
     ];
 
     let result = interpolateTemplate(htmlTemplate, {
-        columnsFromHost : JSON.stringify(columns) // kind of stupid, but haven't found a better way yet
+        columnsFromHost : JSON.stringify(columns), // kind of stupid, but haven't found a better way yet
+        modelPath : modelPath.toString()
     });
 
     return result;
