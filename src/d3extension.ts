@@ -2,17 +2,23 @@
 
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
+import * as fs from 'fs';
 
 export class D3Extension
 {
     private _output : vscode.OutputChannel;
     private _rootPath : string;
+    private _tmpfile : string;
     private _profilerBinPath : string;
+    private _result : string;
 
-    constructor(rootPath : string, binPath : string) {
+
+    constructor(rootPath : string, tmpfile : string,  binPath : string) {
         this._output = vscode.window.createOutputChannel("D3Extension");
         this._rootPath = rootPath;
         this._profilerBinPath = binPath;
+        this._tmpfile = tmpfile;
+        this._result  = "";
         console.log("Created D3Extension instance");
     }
 
@@ -39,7 +45,8 @@ export class D3Extension
             }
         });
         */
-       let p = cp.spawn(this._profilerBinPath, ['-p']);
+      // let p = cp.spawn(this._profilerBinPath, ['-p']);
+       let p = cp.spawn(this._profilerBinPath, [this._tmpfile]);
        p.stdout.on("data", (data : string | Buffer) : void => {
            channel.append(data.toString());
        });
@@ -50,9 +57,14 @@ export class D3Extension
 
        p.on('exit', (exitCode : number) : void => {
            if (exitCode === 0) {
-               vscode.window.showInformationMessage("Profiler collection concluded");
+            vscode.window.showInformationMessage("Profiler collection concluded");
+            // read the file here?
+            console.log(`the file to be read is ${this._tmpfile}`);
+            this._result = fs.readFileSync(this._tmpfile, "utf8");
+
            } else {
                vscode.window.showErrorMessage(`Error while driving profiler: ${errString}.`);
+
            }
        });
 

@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 
 import * as d3x from './d3extension';
 
@@ -16,10 +17,13 @@ function interpolateTemplate(template: string, params : Object) {
 export function activate(context: vscode.ExtensionContext) {
     let profilerDriverPath : string | undefined = undefined;
     if (process.env["USERPROFILE"] !== undefined) {
-        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Projects", "ExternalProfilerDriver",
-                "ExternalProfilerDriver","ExternalProfilerDriver","bin","Debug","ExternalProfilerDriver.exe");
+        //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Projects", "ExternalProfilerDriver",
+        //        "ExternalProfilerDriver","ExternalProfilerDriver","bin","Debug","ExternalProfilerDriver.exe");
+        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "delete","main.exe");
+        
         if (! fs.existsSync(profilerDriverPath)) {
             console.log("Cannot find path to external profiler driver");
+            console.log(`path is ${profilerDriverPath}"`);
         } else {
             console.log("Found the profiler driver!");
         }
@@ -27,9 +31,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     let extensionPath = context.extensionPath;
     let mediaPath = path.join(extensionPath, 'resources');
-
-    let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, <string>(profilerDriverPath));
-    context.subscriptions.push(d3Extension);
+    let tmpfile = path.join(os.tmpdir(),'out.txt');
+    let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, tmpfile, <string>(profilerDriverPath));
+    context.subscriptions.push(d3Extension); // add to disposables - when the extension is done these will be deleted
 
     console.log(`Extension "callVTune" is now active, running from ${extensionPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
@@ -101,6 +105,7 @@ export function deactivate() {
 
 function getHtmlContent(extensionPath : string) : string {
     let resourcePath = path.join(extensionPath, 'resources');
+    // Async read
     //let datajson = fs.readFile(path.join(resourcePath, "/data/data2.json"), "utf8", 
     //                function(err, contents){console.log(`data found ${contents}.`);});
 
