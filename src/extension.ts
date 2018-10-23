@@ -29,12 +29,13 @@ export function activate(context: vscode.ExtensionContext) {
         }
     }
 
+    //status.command = "extension.talkD3js";
+    //context.subscriptions.push(status);
     let extensionPath = context.extensionPath;
     let mediaPath = path.join(extensionPath, 'resources');
     let tmpfile = path.join(os.tmpdir(),'out.txt');
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
-    currentPanel = vscode.window.createWebviewPanel("testType", "Panel display", vscode.ViewColumn.Two, { enableScripts : true } );
-    currentPanel.title = "Testing Panel";
+    currentPanel = vscode.window.createWebviewPanel("testType", "Testing Panel", vscode.ViewColumn.Two, { enableScripts : true } );
  
     let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, tmpfile, <string>(profilerDriverPath), currentPanel);
     d3Extension.testOutput("Trying to output to channel");
@@ -50,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (!textEditor) {
       // TODO: Check for actual Python contents
       vscode.window.showErrorMessage("No document selected.");
-      return;
+      //return;
     } else {
       let doc = textEditor.document;
       if (!doc) {
@@ -79,26 +80,33 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
          }, undefined, context.subscriptions);
        }
-       vscode.window.showInformationMessage('Displaying a d3-powered view!');
+       //vscode.window.showInformationMessage('Displaying a d3-powered view!');
     });
 
     // Communicating with the webview (this message is handled in the html javascript)
     let talkPanelDisposable = vscode.commands.registerCommand("extension.talkD3js", () => {
+       // window.showInformationMessage("Profiling...");
        // d3Extension.testOutput("Trying to output to channel"); // have output directed to a "channel" (these appear on the Debug Console)
         if (!currentPanel) {
-            vscode.window.showInformationMessage('Need to have the webview open');
+            //vscode.window.showInformationMessage('Need to have the webview open');
         } else {
-            vscode.window.showInformationMessage('Sending a message to the webview');
-            currentPanel.webview.postMessage({ command : 'refactor'});
+            //vscode.window.showInformationMessage('Sending a message to the webview');
+            //currentPanel.webview.postMessage({ command : 'refactor'});
         }
     });
 
     // this is an example of how an extension can invoke annother command, either from the same extension, from another or from the VSCode core
     let calltestPanelDisposable = vscode.commands.registerCommand("extension.calltestD3js", () => {
-        vscode.window.showInformationMessage("Going to try to invoke the command");
+        //vscode.window.showInformationMessage("Going to try to invoke the command");
         vscode.commands.executeCommand("extension.testD3js");
     });
 
+    context.subscriptions.push(vscode.commands.registerCommand('extension.refactor', () => {
+        if (currentPanel) {
+            currentPanel.webview.postMessage({ command : 'refactor'});
+            vscode.window.showInformationMessage("Going to try to invoke the command");
+        }
+    }));
     context.subscriptions.push(createPanelDisposable);
     context.subscriptions.push(talkPanelDisposable);
     context.subscriptions.push(calltestPanelDisposable);
@@ -109,7 +117,7 @@ export function deactivate() {
     /* empty */
 }
 
-function getHtmlContent(extensionPath : string) : string {
+export function getHtmlContent(extensionPath : string) : string {
     let resourcePath = path.join(extensionPath, 'resources');
     // Async read
     //let datajson = fs.readFile(path.join(resourcePath, "/data/data2.json"), "utf8", 
@@ -130,6 +138,6 @@ function getHtmlContent(extensionPath : string) : string {
         columnsFromHost : JSON.stringify(columns),// kind of stupid, but haven't found a better way yet
         columnsFromHost2 : datajson
     });
-
+    
     return result;
 }

@@ -13,7 +13,9 @@
     "activationEvents": [
         "onCommand:extension.testD3js",
         "onCommand:extension.talkD3js",
-        "onCommand:extension.calltestD3js"
+        "onCommand:extension.calltestD3js",
+        "onCommand:extension.refactor"
+
     ],
     "main": "./out/extension",
     "contributes": {
@@ -31,6 +33,11 @@
             {
                 "command": "extension.calltestD3js",
                 "title": "CallTestD3Panel",
+                "category" : "TestWebview"
+            },
+            {
+                "command": "extension.refactor",
+                "title": "refactor",
                 "category" : "TestWebview"
             }
         ]

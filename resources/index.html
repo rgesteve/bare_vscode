@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.min.css" />
     
     <style>
- 
+
     .bar-chart {
         background-color : #c7d9d9;
     }
@@ -29,7 +29,8 @@
 
     <h2>Latest communication from host</h2>
     <div id="latest-comm"></div>
-
+    <h2>Message</h2>
+    <div id="message">0</div>
     <h2>c3 chart</h2>
     <div id="dataDiv" style="display: none;">${columnsFromHost}</div>
     <div id="dataDiv2" style="display: none;">${columnsFromHost2}</div>
@@ -148,9 +149,13 @@
              .append("p")
              .text("New paragraph!");
        //  Handle a message inside the webview
+       document.getElementById("message").textContent = "hello";
         window.addEventListener('message', event => {
             const message = event.data; // the message data the host sent
             //shouldDisplay.style.visibility = "visible";
+            document.getElementById("message").textContent = "testing";
+
+            counter.textContent = 10;
             commMsg.textContent = "Just received a message at time [" + count + "]";
             console.log("This should be displayed in the developer tools if they're open");
 
