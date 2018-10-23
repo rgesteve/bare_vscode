@@ -32,7 +32,12 @@ export function activate(context: vscode.ExtensionContext) {
     let extensionPath = context.extensionPath;
     let mediaPath = path.join(extensionPath, 'resources');
     let tmpfile = path.join(os.tmpdir(),'out.txt');
-    let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, tmpfile, <string>(profilerDriverPath));
+    let currentPanel : vscode.WebviewPanel | undefined = undefined;
+    currentPanel = vscode.window.createWebviewPanel("testType", "Panel display", vscode.ViewColumn.Two, { enableScripts : true } );
+    currentPanel.title = "Testing Panel";
+ 
+    let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, tmpfile, <string>(profilerDriverPath), currentPanel);
+    d3Extension.testOutput("Trying to output to channel");
     context.subscriptions.push(d3Extension); // add to disposables - when the extension is done these will be deleted
 
     console.log(`Extension "callVTune" is now active, running from ${extensionPath}.`);
@@ -40,28 +45,29 @@ export function activate(context: vscode.ExtensionContext) {
 
     //let localPath = vscode.Uri.file(path.join(mediaPath, 'kitten.jpg')).with({ scheme : 'vscode-resource'});
 
-    let currentPanel : vscode.WebviewPanel | undefined = undefined;
-
-    let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
-       let textEditor = vscode.window.activeTextEditor;
-       if (!textEditor) {
-         // TODO: Check for actual Python contents
-         vscode.window.showErrorMessage("No document selected.");
+    //let currentPanel : vscode.WebviewPanel | undefined = undefined;
+    let textEditor = vscode.window.activeTextEditor;
+    if (!textEditor) {
+      // TODO: Check for actual Python contents
+      vscode.window.showErrorMessage("No document selected.");
+      return;
+    } else {
+      let doc = textEditor.document;
+      if (!doc) {
+         vscode.window.showErrorMessage("Please invoke this command from a Python file.");
          return;
-       } else {
-         let doc = textEditor.document;
-         if (!doc) {
-            vscode.window.showErrorMessage("Please invoke this command from a Python file.");
-            return;
-         } 
-         vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
-       }
+      } 
+      vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
+    }
+    let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
+
 
        if (currentPanel) {
          currentPanel.reveal(vscode.ViewColumn.Two);
        } else {
          currentPanel = vscode.window.createWebviewPanel("testType", "Panel display", vscode.ViewColumn.Two, { enableScripts : true } );
          currentPanel.title = "Testing Panel";
+         d3Extension.testOutput("Trying to output to channel");
          currentPanel.webview.html = getHtmlContent(extensionPath);
 
          currentPanel.onDidDispose(
@@ -78,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Communicating with the webview (this message is handled in the html javascript)
     let talkPanelDisposable = vscode.commands.registerCommand("extension.talkD3js", () => {
-        d3Extension.testOutput("Trying to output to channel"); // have output directed to a "channel" (these appear on the Debug Console)
+       // d3Extension.testOutput("Trying to output to channel"); // have output directed to a "channel" (these appear on the Debug Console)
         if (!currentPanel) {
             vscode.window.showInformationMessage('Need to have the webview open');
         } else {

@@ -11,14 +11,15 @@ export class D3Extension
     private _tmpfile : string;
     private _profilerBinPath : string;
     private _result : string;
+    private _panel: vscode.WebviewPanel|undefined;
 
-
-    constructor(rootPath : string, tmpfile : string,  binPath : string) {
+    constructor(rootPath : string, tmpfile : string,  binPath : string, panel: vscode.WebviewPanel | undefined) {
         this._output = vscode.window.createOutputChannel("D3Extension");
         this._rootPath = rootPath;
         this._profilerBinPath = binPath;
         this._tmpfile = tmpfile;
         this._result  = "";
+        this._panel = panel;
         console.log("Created D3Extension instance");
     }
 
@@ -61,7 +62,12 @@ export class D3Extension
             // read the file here?
             console.log(`the file to be read is ${this._tmpfile}`);
             this._result = fs.readFileSync(this._tmpfile, "utf8");
-
+            
+            if (this._panel) {
+                this._panel.reveal(vscode.ViewColumn.Two);
+                this._panel.webview.postMessage({ command : 'refactor'});
+              }
+            
            } else {
                vscode.window.showErrorMessage(`Error while driving profiler: ${errString}.`);
 

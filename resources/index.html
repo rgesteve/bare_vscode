@@ -14,12 +14,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.min.css" />
     
     <style>
+ 
     .bar-chart {
         background-color : #c7d9d9;
     }
     </style>
   </head>
   <body>
+    <div id="container">
     <h1>This is the version of the content in a file, from a template</h1>
 
     <h2>Local lines counter</h2>
@@ -53,7 +55,7 @@
     <tr data-tt-id="12" data-tt-parent-id="11"><td>func@0x180123b90</td><td>1.203510</td><td>opencv_imgcodecs331.dll</td><td>func@0x180123b90</td><td>[Unknown]</td><td>0x180123b90</td></tr>
     <tr data-tt-id="13" data-tt-parent-id="11"><td>func@0x1801233b0</td><td>0</td><td>opencv_imgcodecs331.dll</td><td>func@0x1801233b0</td><td>[Unknown]</td><td>0x1801233b0</td></tr>
     </table>
-
+</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/jquery.treetable.min.js"></script>
@@ -63,7 +65,7 @@
         const vscode = acquireVsCodeApi();
         const counter = document.getElementById("lines-of-code-counter");
         const commMsg = document.getElementById("latest-comm");
-
+        const shouldDisplay = document.getElementById("container");
         let count = 0;
         setInterval( () => {
             counter.textContent = count++;
@@ -148,8 +150,10 @@
        //  Handle a message inside the webview
         window.addEventListener('message', event => {
             const message = event.data; // the message data the host sent
+            //shouldDisplay.style.visibility = "visible";
             commMsg.textContent = "Just received a message at time [" + count + "]";
             console.log("This should be displayed in the developer tools if they're open");
+
         });
     })();
     </script>
