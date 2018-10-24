@@ -12,8 +12,6 @@
     ],
     "activationEvents": [
         "onCommand:extension.testD3js",
-        "onCommand:extension.talkD3js",
-        "onCommand:extension.calltestD3js",
         "onCommand:extension.refactor"
 
     ],
@@ -21,24 +19,14 @@
     "contributes": {
         "commands": [
             {
-                "command": "extension.talkD3js",
-                "title": "TalktoD3Panel",
-                "category" : "TestWebview"
-            },
-            {
                 "command": "extension.testD3js",
-                "title": "TesttoD3Panel",
-                "category" : "TestWebview"
-            },
-            {
-                "command": "extension.calltestD3js",
-                "title": "CallTestD3Panel",
-                "category" : "TestWebview"
+                "title": "Profile",
+                "category" : "Python Profiler"
             },
             {
                 "command": "extension.refactor",
                 "title": "refactor",
-                "category" : "TestWebview"
+                "category" : "Python Profiler"
             }
         ]
     },
