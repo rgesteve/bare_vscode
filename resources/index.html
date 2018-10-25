@@ -5,21 +5,22 @@
     <meta name="viewport" content="with=device-width, initial-scale=1.0">
     <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
 
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
-    <!-- <link rel="stylesheet" href="file:///c:/users/rgesteve/js/libraries/jquery.treetable/css/jquery.treetable.css" /> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.min.css" />
-    <!-- <link rel="stylesheet" href="file:///c:/users/rgesteve/js/libraries/jquery.treetable/css/jquery.treetable.theme.default.css" /> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.min.css" />
-    
+
     <style>
+
     .bar-chart {
         background-color : #c7d9d9;
     }
     </style>
   </head>
   <body>
+    <div id="container">
     <h1>This is the version of the content in a file, from a template</h1>
 
     <h2>Local lines counter</h2>
@@ -27,11 +28,14 @@
 
     <h2>Latest communication from host</h2>
     <div id="latest-comm"></div>
-
+    <h2>Message</h2>
+    <div id="message">0</div>
     <h2>c3 chart</h2>
     <div id="dataDiv" style="display: none;">${columnsFromHost}</div>
+    <div id="dataDiv2" style="display: none;">${columnsFromHost2}</div>
     <div id="visitor" style="height:290px; width:100%;"></div>
-
+    <div id="chart" style="height:290px; width:100%;"></div>
+    <div id="chart2" style="height:290px; width:100%;"></div>
     <h2>The table of functions</h2>
 
     <table id="table-profile">
@@ -51,6 +55,7 @@
     <tr data-tt-id="12" data-tt-parent-id="11"><td>func@0x180123b90</td><td>1.203510</td><td>opencv_imgcodecs331.dll</td><td>func@0x180123b90</td><td>[Unknown]</td><td>0x180123b90</td></tr>
     <tr data-tt-id="13" data-tt-parent-id="11"><td>func@0x1801233b0</td><td>0</td><td>opencv_imgcodecs331.dll</td><td>func@0x1801233b0</td><td>[Unknown]</td><td>0x1801233b0</td></tr>
     </table>
+</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -61,7 +66,7 @@
         const vscode = acquireVsCodeApi();
         const counter = document.getElementById("lines-of-code-counter");
         const commMsg = document.getElementById("latest-comm");
-
+        const shouldDisplay = document.getElementById("container");
         let count = 0;
         setInterval( () => {
             counter.textContent = count++;
@@ -78,7 +83,7 @@
         $("#table-profile").treetable({ expandable: true, initialState : "expanded" });
 
        let data = JSON.parse(document.getElementById("dataDiv").textContent);
-
+       let data2 = JSON.parse(document.getElementById("dataDiv2").textContent);
         // a second chart
         var chart = c3.generate({
             bindto: '#visitor',
@@ -112,11 +117,48 @@
             }
         });
 
-        // Handle a message inside the webview
+        var dataset = [ 5, 10, 15, 20, 25 ];
+        var chart = c3.generate({
+         bindto: '#chart',
+         data: {
+           columns: [
+             ['data1', 30, 200, 100, 400, 150, 250],
+             ['data2', 50, 20, 10, 40, 15, 25]
+           ],
+           axes: {
+             data2: 'y2' // ADD
+           }
+         },
+         axis: {
+           y2: {
+             show: true // ADD
+           }
+         }
+         });
+
+         var chart = c3.generate({
+            bindto: '#chart2',
+            data: {
+                json: data2
+            }
+        });
+         var dataset = [ 5, 10, 15, 14];
+        d3.select("body").selectAll("p")
+             .data(dataset)
+             .enter()
+             .append("p")
+             .text("New paragraph!");
+       //  Handle a message inside the webview
+       document.getElementById("message").textContent = "hello";
         window.addEventListener('message', event => {
             const message = event.data; // the message data the host sent
+            //shouldDisplay.style.visibility = "visible";
+            document.getElementById("message").textContent = "testing";
+
+            counter.textContent = 10;
             commMsg.textContent = "Just received a message at time [" + count + "]";
             console.log("This should be displayed in the developer tools if they're open");
+
         });
     })();
     </script>
