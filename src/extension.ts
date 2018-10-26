@@ -95,6 +95,7 @@ export function deactivate() {
 
 export function getHtmlContent(extensionPath : string) : string {
     let resourcePath = path.join(extensionPath, 'resources');
+    let scriptPath = vscode.Uri.file(path.join(resourcePath, 'main.js')).with({ scheme : 'vscode-resource'});
     // Async read
     //let datajson = fs.readFile(path.join(resourcePath, "/data/data2.json"), "utf8", 
     //                function(err, contents){console.log(`data found ${contents}.`);});
@@ -112,7 +113,8 @@ export function getHtmlContent(extensionPath : string) : string {
 
     let result = interpolateTemplate(htmlTemplate, {
         columnsFromHost : JSON.stringify(columns),// kind of stupid, but haven't found a better way yet
-        columnsFromHost2 : datajson
+        columnsFromHost2 : datajson,
+        script : scriptPath
     });
     
     return result;
