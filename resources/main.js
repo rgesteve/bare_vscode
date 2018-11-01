@@ -231,3 +231,76 @@ var vm = new Vue({
       });
   })();
 
+var columnDefs = [
+    {headerName: "Function", field: 'function', cellRenderer:'agGroupCellRenderer'},
+    {headerName: "CPU Time", field: "cpu_time"},
+    {headerName: "Module", field: "module"},
+    {headerName: "Function (Full)", field: "function_full"},
+    {headerName: "Source File", field: "source_file"},
+    {headerName: "Start Address", field: "start_address"}
+];
+
+var rowData = [
+    {function: 'func@0x1e0897c0', cpu_time: "12.703125", module: "python36.dll", function_full: "func@0x1e0897c0", source_file: "Unknown", start_address: "Unknown", 
+    children:[
+        {function:'_scrt_common_main_seh', cpu_time: "12.703125", module: "python.exe", function_full: "_scrt_common_main_seh", source_file: "exe_common.inl", start_address: "0x1d001150"},
+        {function:'BaseThreadInitThunk', cpu_time: "0", module: "KERNEL32.DLL", function_full: "BaseThreadInitThunk", source_file: "[Unknown]", start_address: "0x180012760"},
+        {function:'RtlUserThreadStart', cpu_time: "0", module: "ntdll.dll", function_full: "RtlUserThreadStart", source_file: "[Unknown]", start_address: "0x180070d30"},
+    ]},
+    {function: 'jpeg_idct_16x16', cpu_time: "1.538451", module: "opencv_imgcodecs331.dll", function_full: "peg_idct_16x16", source_file: "[Unknown]", start_address: "0x180131d90",
+    children: [
+        {function: 'func@0x180123b90'         ,cpu_time: '1.538451',module: 'opencv_imgcodecs331.dll', function_full: 'func@0x180123b90',  source_file: '[Unknown]', start_address: '0x180123b90' },
+        {function: 'func@0x1801233b0'         ,cpu_time: '0',       module: 'opencv_imgcodecs331.dll', function_full: 'func@0x1801233b0',  source_file: '[Unknown]', start_address: '0x1801233b0' },
+        {function: 'jpeg_read_scanlines'      ,cpu_time: '0',       module: 'opencv_imgcodecs331.dll', function_full: 'jpeg_read_scanlines',source_file: '[Unknown]', start_address: '0x18011c900'},
+        {function: 'cv::JpegDecoder::readData',cpu_time: '0',       module: 'opencv_imgcodecs331.dll', function_full: 'cv::JpegDecoder::readData(class cv::Mat &)', source_file: 'grfmt_jpeg.cpp', start_address: '0x1800277a0'},
+        {function: 'cv::imdecode_'            ,cpu_time: '0',       module: 'opencv_imgcodecs331.dll', function_full: 'cv::imdecode_',      source_file: 'loadsave.cpp', start_address: '0x18000eb10'},
+
+    ]},
+    {function: 'jpeg_idct_islow' , cpu_time: '1.214521', module: 'opencv_imgcodecs331.dll', function_full: 'jpeg_idct_16x16' , source_file:'jpeg_idct_islow,[Unknown]', start_address: '0x180135c20',
+    children: [
+        {function: 'func@0x180123b90', cpu_time: '1.203510', module: 'opencv_imgcodecs331.dll', function_full: 'func@0x180123b90', source_file:'[Unknown]', start_address: '0x180123b90'},
+        {function: 'func@0x1801233b0', cpu_time: '0'       , module: 'opencv_imgcodecs331.dll', function_full: 'func@0x1801233b0', source_file:'[Unknown]', start_address: '0x1801233b0'},
+    
+    ]}
+    ];
+
+var gridOptions = {
+    columnDefs: columnDefs,
+    rowData: rowData,
+    enableSorting: true,
+    animateRows: true,
+    enableFilter: true,
+    enableColResize: true,
+    getNodeChildDetails: getNodeChildDetails,
+    onGridReady: function(params) {
+    }
+};
+
+function getNodeChildDetails(rowItem) {
+    if (rowItem.children) {
+        return {
+            group: true,
+
+            expanded: rowItem.function === 'func@0x1e0897c0',
+            // provide ag-Grid with the children of this group
+            children: rowItem.children,
+            // the key is used by the default group cellRenderer
+            key: rowItem.function,
+
+        };
+    } else {
+        return null;
+    }
+}
+
+function onTextboxFilterChanged() {
+    var value = document.getElementById('filter-textbox').value;
+    gridOptions.api.setQuickFilter(value);
+}
+
+// setup the grid after the page has finished loading
+document.addEventListener('DOMContentLoaded', function() {
+    var gridDiv = document.querySelector('#myGrid');
+    new agGrid.Grid(gridDiv, gridOptions);
+    gridOptions.api.sizeColumnsToFit();
+});
