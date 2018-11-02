@@ -101,7 +101,7 @@ export function getHtmlContent(extensionPath : string) : string {
     //                function(err, contents){console.log(`data found ${contents}.`);});
 
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
-    let datajson = fs.readFileSync(path.join(resourcePath, "/data/data2.json"), "utf8");
+    let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data.json"), "utf8");
     console.log(`data found ${datajson}.`);
     const columns = [
                     ['KindofOpen', 4],
