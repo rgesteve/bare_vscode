@@ -1,46 +1,4 @@
 
-var vm = new Vue({
-    el: '#vued3chart',
-    data: {
-      data: [4, 8, 15, 16, 23, 42]
-    },
-    methods: {
-      renderChart: function(data) {
-        // This code is based on https://bost.ocks.org/mike/bar/2/
-        var width = 750,
-            barHeight = 20;
-        var x = d3.scale.linear()
-            .domain([0, d3.max(data)])
-            .range([0, width]);
-        var vuechart = d3.select(this.$el)
-            .attr("width", width)
-            .attr("height", barHeight * data.length);
-        var d = vuechart.selectAll("g")
-            .data(data);
-       
-        var g = d.enter().append("g")
-            .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
-
-        g.append("rect")
-            .attr("width", x)
-            .attr("height", barHeight - 1);
-        g.append("text")
-            .attr("x", function(d) { return x(d) - 3; })
-            .attr("y", barHeight / 2)
-            .attr("dy", ".35em")
-            .text(function(d) { return d; });
-      }
-    },
-    mounted: function() {
-      this.renderChart(this.$data.data);
-    },
-    watch: {
-      data: function(val) {
-        this.renderChart(val);
-      }
-    }
-  });
-
   new Vue({
           el: "#vuec3chart",
           mounted: function() {
@@ -147,7 +105,7 @@ var vm = new Vue({
       let count = 0;
       setInterval( () => {
           counter.textContent = count++;
-          if ((count % 250) === 0) {
+          if ((count % 5) === 0 && count < 10) {
               console.log("Sending a message to the host...");
               vscode.postMessage({
                   command: 'alert',
@@ -211,12 +169,7 @@ var vm = new Vue({
               json: data2
           }
       });
-       var dataset = [ 5, 10, 15, 14];
-      d3.select("body").selectAll("p")
-           .data(dataset)
-           .enter()
-           .append("p")
-           .text("New paragraph!");
+
      //  Handle a message inside the webview
      document.getElementById("message").textContent = "hello";
       window.addEventListener('message', event => {

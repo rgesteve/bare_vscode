@@ -26,10 +26,7 @@
     </style>
 
     <body>
-    <div>
-    <svg id="vued3chart" class="vuechart"></svg>
-    <h1>Chart using d3 with Vue</h1>
-    </div>
+
     <div id="vuec3chart"></div>
     <h1>Chart using c3 with Vue</h1>
     <div id="container">
@@ -46,31 +43,11 @@
     <div id="dataDiv" style="display: none;">${columnsFromHost}</div>
     <div id="dataDiv2" style="display: none;">${columnsFromHost2}</div>
     <div id="visitor" style="height:290px; width:100%;"></div>
-    <div id="chart" style="height:290px; width:100%;"></div>
-    <div id="chart2" style="height:290px; width:100%;"></div>
     <h2>The table of functions</h2>
-
-    <table id="table-profile">
-    <tr data-tt-id="0"><th>Function</th><th>CPU Time</th><th>Module</th><th>Function (Full)</th><th>Source File</th><th>Start Address</th></tr>
-    <tr data-tt-id="1">                      <td>func@0x1e0897c0</td>      <td>12.703125</td><td>python36.dll</td><td>func@0x1e0897c0</td><td>[Unknown]</td><td>0x1e0897c0</td></tr>
-    <tr data-tt-id="2" data-tt-parent-id="1"><td>_scrt_common_main_seh</td><td>12.703125</td><td>python.exe</td><td>_scrt_common_main_seh</td><td>exe_common.inl</td><td>0x1d001150</td></tr>
-    <tr data-tt-id="3" data-tt-parent-id="1"><td>BaseThreadInitThunk</td><td>0</td><td>KERNEL32.DLL</td><td>BaseThreadInitThunk</td><td>[Unknown]</td><td>0x180012760</td></tr>
-    <tr data-tt-id="4" data-tt-parent-id="1"><td>RtlUserThreadStart</td><td>0</td><td>ntdll.dll</td><td>RtlUserThreadStart</td><td>[Unknown]</td><td>0x180070d30</td></tr>
-    <tr data-tt-id="5">                      <td>jpeg_idct_16x16</td>       <td>1.538451</td><td>opencv_imgcodecs331.dll</td><td>jpeg_idct_16x16</td><td>[Unknown]</td><td>0x180131d90</td></tr>
-    <tr data-tt-id="6" data-tt-parent-id="5"><td>func@0x180123b90</td><td>1.538451</td><td>opencv_imgcodecs331.dll</td><td>func@0x180123b90</td><td>[Unknown]</td><td>0x180123b90</td></tr>
-    <tr data-tt-id="7" data-tt-parent-id="5"><td>func@0x1801233b0</td><td>0</td><td>opencv_imgcodecs331.dll</td><td>func@0x1801233b0</td><td>[Unknown]</td><td>0x1801233b0</td></tr>
-    <tr data-tt-id="8" data-tt-parent-id="5"><td>jpeg_read_scanlines</td><td>0</td><td>opencv_imgcodecs331.dll</td><td>jpeg_read_scanlines</td><td>[Unknown]</td><td>0x18011c900</td></tr>
-    <tr data-tt-id="9" data-tt-parent-id="5"><td>cv::JpegDecoder::readData</td><td>0</td><td>opencv_imgcodecs331.dll</td><td>cv::JpegDecoder::readData(class cv::Mat &)</td><td>grfmt_jpeg.cpp</td><td>0x1800277a0</td></tr>
-    <tr data-tt-id="10" data-tt-parent-id="5"><td>cv::imdecode_</td><td>0</td><td>opencv_imgcodecs331.dll</td><td>cv::imdecode_</td><td>loadsave.cpp</td><td>0x18000eb10</td></tr>
-
-    <tr data-tt-id="11">                       <td>jpeg_idct_islow</td>       <td>1.214521</td><td>opencv_imgcodecs331.dll</td><td>jpeg_idct_16x16</td><td>jpeg_idct_islow,[Unknown]</td><td>0x180135c20</td></tr>
-    <tr data-tt-id="12" data-tt-parent-id="11"><td>func@0x180123b90</td><td>1.203510</td><td>opencv_imgcodecs331.dll</td><td>func@0x180123b90</td><td>[Unknown]</td><td>0x180123b90</td></tr>
-    <tr data-tt-id="13" data-tt-parent-id="11"><td>func@0x1801233b0</td><td>0</td><td>opencv_imgcodecs331.dll</td><td>func@0x1801233b0</td><td>[Unknown]</td><td>0x1801233b0</td></tr>
-    </table>
     <style> html, body { margin: 0; padding: 0; height: 100%; } </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/18.1.1/ag-grid.min.js"></script>
     <div style="margin-bottom:4px"><input placeholder="Filter..." type="text" id="filter-textbox" oninput="onTextboxFilterChanged()" /></div>
-<div id="myGrid" class="ag-theme-fresh" style="height: 200px;"></div>
+    <div id="myGrid" class="ag-theme-fresh" style="height: 200px;"></div>
 </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
