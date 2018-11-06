@@ -59,13 +59,13 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
         //sourcePanel = vscode.window.createWebviewPanel("Source", "Source Panel", vscode.ViewColumn.Three, { enableScripts : true } );
         //sourcePanel.webview.html = getSourceWebviewContent();
-        var uri = vscode.Uri.file("C:\\Users\\clairiky\\Work\\WOS\\PTVS\\examples\\cython\\cython_example_proj\\__init__.py");
-        vscode.workspace.openTextDocument(uri).then(doc => {
-            vscode.window.showTextDocument(doc);
-			console.log('Source file opened');
-		}, err => {
-			console.log(`Failed to load '${uri.toString()}'\n\n${String(err)}`, '');
-		});
+        // var uri = vscode.Uri.file("C:\\Users\\clairiky\\Work\\WOS\\PTVS\\examples\\cython\\cython_example_proj\\__init__.py");
+        // vscode.workspace.openTextDocument(uri).then(doc => {
+        //     vscode.window.showTextDocument(doc);
+		// 	console.log('Source file opened');
+		// }, err => {
+		// 	console.log(`Failed to load '${uri.toString()}'\n\n${String(err)}`, '');
+		// });
      }, undefined, context.subscriptions);
     context.subscriptions.push(d3Extension); 
     let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {

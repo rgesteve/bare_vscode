@@ -114,8 +114,6 @@
           }
       }, 500);
 
-      // allow the expandable nature of the profile table
-      $("#table-profile").treetable({ expandable: true, initialState : "expanded" });
 
      let data = JSON.parse(document.getElementById("dataDiv").textContent);
      let data2 = JSON.parse(document.getElementById("dataDiv2").textContent);
@@ -194,24 +192,34 @@ var columnDefs = [
 ];
 
 
+
 var gridOptions = {
     columnDefs: columnDefs,
     enableSorting: true,
     animateRows: true,
     enableFilter: true,
     enableColResize: true,
-    getNodeChildDetails: getNodeChildDetails,
-    onGridReady: function(params) {
-    }
+    rowSelection: 'single',
+    onSelectionChanged: onSelectionChanged,
+    getNodeChildDetails: getNodeChildDetails
 };
+
+function onSelectionChanged() {
+    var selectedRows = gridOptions.api.getSelectedRows();
+    var selectedRowsString = '';
+    selectedRows.forEach( function(selectedRow, index) {
+        if (index!==0) {
+            selectedRowsString += ', ';
+        }
+        selectedRowsString += selectedRow.source_file;
+    });
+    document.querySelector('#selectedRow').innerHTML = selectedRowsString;
+}
 
 function getNodeChildDetails(rowItem) {
     if (rowItem.children) {
         return {
             group: true,
-
-            expanded: rowItem.function === 'func@0x1e0897c0',
-            // provide ag-Grid with the children of this group
             children: rowItem.children,
             // the key is used by the default group cellRenderer
             key: rowItem.function,
@@ -236,7 +244,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
     gridOptions.api.setRowData(JSON.parse(data));
 });
-
-function jsonLoad(callback){
-
-}

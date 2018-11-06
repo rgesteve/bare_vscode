@@ -13,24 +13,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/css/jquery.treetable.theme.default.min.css" />
-
-    <style>
-        .vuechart rect {
-          fill: rgb(47, 103, 146);
-        }
-        .vuechart text {
-          fill: white;
-          font: 10px sans-serif;
-          text-anchor: end;
-        }
-    </style>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/jquery.treetable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/18.1.1/ag-grid.min.js"></script>
     <body>
 
     <div id="vuec3chart"></div>
+    <style>h1 { text-align: center; }</style>
+
     <h1>Chart using c3 with Vue</h1>
     <div id="container">
-    <h1>This is the version of the content in a file, from a template</h1>
 
     <h2>Local lines counter</h2>
     <div id="lines-of-code-counter">0</div>
@@ -45,14 +38,14 @@
     <div id="visitor" style="height:290px; width:100%;"></div>
     <h2>The table of functions</h2>
     <style> html, body { margin: 0; padding: 0; height: 100%; } </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/18.1.1/ag-grid.min.js"></script>
+
     <div style="margin-bottom:4px"><input placeholder="Filter..." type="text" id="filter-textbox" oninput="onTextboxFilterChanged()" /></div>
-    <div id="myGrid" class="ag-theme-fresh" style="height: 200px;"></div>
+    <div id="myGrid" class="ag-theme-dark" style="height: 400px;"></div>
+    <div style="margin-bottom: 40px" id="selectedRow"></div>
+
 </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-treetable/3.2.0/jquery.treetable.min.js"></script>
+
     <script src="${script}"></script>
   </body>
 </html>
