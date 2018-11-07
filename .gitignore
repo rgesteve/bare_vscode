@@ -1,6 +1,13 @@
 out
-node_modules
 .vscode-test/
 *.vsix
+
+# npm artifacts
+node_modules
+
+# Jupyter notebooks
 .ipynb_checkpoints/
+
+# Output from webpack
+resources/bundle.js
 

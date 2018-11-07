@@ -3,9 +3,9 @@ const path = require ( 'path' );
 module.exports = {
   target: 'node',
   entry: './resources/index.js',
-  mode : 'development',
+  mode : 'none',
   output: {
-    path: path.resolve ( __dirname, '/resources' ),
+    path: path.resolve ( __dirname + '/resources'),
     filename: 'bundle.js',
     libraryTarget: 'commonjs2'
   },
