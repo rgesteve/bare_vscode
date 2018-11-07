@@ -1,5 +1,5 @@
-
-  new Vue({
+/*
+new Vue({
           el: "#vuec3chart",
           mounted: function() {
               c3.generate({
@@ -97,8 +97,107 @@
       });
     }
   });
+  */
+
+  function graphSeries() {
+    c3.generate({
+            bindto: "#vuec3chart",
+            data: {
+                type: "area",
+                x: "x",
+                xFormat: "%H:%M",
+                columns: [
+                   [
+                     "x",
+                     "12:38",
+                     "12:39",
+                     "12:40",
+                     "12:41",
+                     "12:42",
+                     "12:43",
+                     "12:44",
+                     "12:45",
+                     "12:46",
+                     "12:47",
+                     "12:48",
+                     "12:49",
+                     "12:50",
+                     "12:51",
+                     "12:52",
+                     "12:53",
+                     "12:54",
+                     "12:55",
+                     "12:56",
+                     "12:57",
+                     "12:58",
+                     "12:59",
+                   ],
+                   [
+                     "write",
+                     9884,
+                     1353,
+                     2243,
+                     3302,
+                     3443,
+                     5731,
+                     4163,
+                     8329,
+                     8809,
+                     3145,
+                     5843,
+                     9190,
+                     0899,
+                     6873,
+                     7113,
+                     0870,
+                     0700,
+                     8144,
+                     8624,
+                     9513,
+                     6307,
+                     6307,
+                   ],
+                   [
+                     "read",
+                     848,
+                     536,
+                     432,
+                     024,
+                     432,
+                     312,
+                     632,
+                     296,
+                     096,
+                     456,
+                     432,
+                     904,
+                     992,
+                     736,
+                     136,
+                     704,
+                     808,
+                     440,
+                     240,
+                     136,
+                     072,
+                     073,
+                   ]
+                ]             
+              },              
+          axis: {
+            x: {
+                type: "timeseries",
+                tick: {
+                    format: '%H:%M'
+                }
+            }
+          }
+    });
+  }
+
   (function () {
       const vscode = acquireVsCodeApi();
+      console.log("**** This is from the 'init' entry point (to call it something) ****");
       const counter = document.getElementById("lines-of-code-counter");
       const commMsg = document.getElementById("latest-comm");
       const shouldDisplay = document.getElementById("container");
@@ -114,6 +213,8 @@
           }
       }, 500);
 
+      // first chart
+      graphSeries();
 
      let data = JSON.parse(document.getElementById("dataDiv").textContent);
      let data2 = JSON.parse(document.getElementById("dataDiv2").textContent);
@@ -191,8 +292,6 @@ var columnDefs = [
     {headerName: "Start Address", field: "start_address"}
 ];
 
-
-
 var gridOptions = {
     columnDefs: columnDefs,
     enableSorting: true,
@@ -238,9 +337,43 @@ function onTextboxFilterChanged() {
 // setup the grid after the page has finished loading
 document.addEventListener('DOMContentLoaded', function() {
     var gridDiv = document.querySelector('#myGrid');
+    console.log("*** this is the contentloaded handler");
+    console.log(`Do I have access to agGrid ${typeof(agGrid)} ?`);
+
+    var dataTxt = document.querySelector('#dataDiv2').textContent;
+    var data = JSON.parse(dataTxt);
+
+    /*
+    console.log(`Data text is: \n ${dataTxt}`);
+    console.log("-------------------------");
+    console.log(`Data is: \n ${data} \n (Done)`);
+
     new agGrid.Grid(gridDiv, gridOptions);
     gridOptions.api.sizeColumnsToFit();
-    var data = document.querySelector('#dataDiv2').textContent;
+    gridOptions.api.setRowData(data);
+    */
+    //gridOptions.api.setRowData(JSON.parse(data));
 
-    gridOptions.api.setRowData(JSON.parse(data));
+    // specify the columns
+    var columnDefs = [
+        {headerName: "Make", field: "make"},
+        {headerName: "Model", field: "model"},
+        {headerName: "Price", field: "price"}
+    ];
+      
+    // specify the data
+    var rowData = [
+        {make: "Toyota", model: "Celica", price: 35000},
+        {make: "Ford", model: "Mondeo", price: 32000},
+        {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+      
+    // let the grid know which columns and what data to use
+      var gridOptions = {
+        columnDefs: columnDefs,
+        rowData: rowData
+      };
+  
+    // create the grid passing in the div to use together with the columns & data we want to use
+    new agGrid.Grid(gridDiv, gridOptions);
 });
