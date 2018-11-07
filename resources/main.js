@@ -283,11 +283,25 @@ new Vue({
       });
   })();
 
+  function linkRenderer(params) {
+    // Need to check data when grouping (see https://www.ag-grid.com/javascript-grid-cell-rendering-components/#cell-renderers-and-row-groups)
+    if (!params.node.group) {
+        // data exists, so we can access it
+        return `<a href="">${params.value}</a>`;
+    } else {
+        // `null` signals ag-grid to display a blank cell
+        return null;
+    }
+};
+
 var columnDefs = [
     {headerName: "Function", field: 'function', cellRenderer:'agGroupCellRenderer'},
     {headerName: "CPU Time", field: "cpu_time"},
     {headerName: "Module", field: "module"},
-    {headerName: "Function (Full)", field: "function_full"},
+    //{headerName: "Function (Full)", field: "function_full", cellRenderer : (funcName) => { `<a href="">${funcName}</a>`}},
+    //{headerName: "Function (Full)", field: "function_full", cellRenderer : (funcName) => { `${funcName}`}},
+    //{headerName: "Function (Full)", field: "function_full"},
+    {headerName: "Function (Full)", field: "function_full", cellRenderer : linkRenderer},
     {headerName: "Source File", field: "source_file"},
     {headerName: "Start Address", field: "start_address"}
 ];
