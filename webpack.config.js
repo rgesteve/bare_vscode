@@ -1,13 +1,13 @@
 const path = require ( 'path' );
 
 module.exports = {
-  target: 'node',
+  // target: 'node',
   entry: './resources/index.js',
   mode : 'none',
   output: {
     path: path.resolve ( __dirname + '/resources'),
     filename: 'bundle.js',
-    libraryTarget: 'commonjs2'
+    //libraryTarget: 'commonjs2'
   },
   externals: {
     vscode: 'commonjs vscode'
