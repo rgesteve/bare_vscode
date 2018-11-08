@@ -56,10 +56,13 @@ export class D3Extension
        // let p = cp.spawn(this._profilerBinPath, [this._tmpfile]);
        p.stdout.on("data", (data : string | Buffer) : void => {
            channel.append(data.toString());
+           this._status.text = "Profiler running ..."; this._status.show();
        });
        p.stderr.on("data", (data : string | Buffer) : void => {
            errString += data.toString();
-           channel.append(data.toString());
+           // TODO --- I'm getting errors, what are they?
+           // this._status.text = "Profiler encountered error..."; this._status.show();
+           channel.append(`From driver: ${data.toString()}`);
        });
 
        p.on('exit', (exitCode : number) : void => {

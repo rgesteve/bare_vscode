@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
     let tmpfile = path.join(os.tmpdir(),'out.txt');
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
     let sourcePanel : vscode.WebviewPanel | undefined = undefined;
-    currentPanel = vscode.window.createWebviewPanel("testType", "Testing Panel", vscode.ViewColumn.Two, { enableScripts : true } );
+    currentPanel = vscode.window.createWebviewPanel("testType", "Profile summary", vscode.ViewColumn.Two, { enableScripts : true } );
 
     console.log(`Extension "callVTune" is now active, running from ${profilerDriverPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
@@ -47,12 +47,13 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage("No document selected.");
         return;
     } else {
-        let doc = textEditor.document;
+        /// let doc = textEditor.document;
         /// if (!doc || doc.languageId != "python") {
         ///   vscode.window.showErrorMessage("Please invoke this command from a Python file.");
         ///   return;
         /// }
-        vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
+        /// vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
+        /* TODO -- verify that the active document is a Python script */
     }
 
     let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, tmpfile, <string>(profilerDriverPath), currentPanel);
