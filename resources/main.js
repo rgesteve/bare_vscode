@@ -197,7 +197,7 @@ new Vue({
 
   (function () {
       const vscode = acquireVsCodeApi();
-      console.log("**** This is from the 'init' entry point (to call it something) ****");
+      window.vscode = vscode;
       const counter = document.getElementById("lines-of-code-counter");
       const commMsg = document.getElementById("latest-comm");
       const shouldDisplay = document.getElementById("container");
@@ -328,6 +328,17 @@ function onSelectionChanged() {
         selectedRowsString += selectedRow.source_file;
     });
     console.log(`The selected row is [${selectedRowsString}]`);
+
+    if (window.vscode) {
+
+        window.vscode.postMessage({
+            command: 'should_open',
+            text: selectedRowsString
+        });
+        console.log("Should have just sent message to host");
+    } else {
+        console.log("Cannot find vscode instance");
+    }
 }
 
 function getNodeChildDetails(rowItem) {
