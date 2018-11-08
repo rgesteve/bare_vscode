@@ -20,7 +20,9 @@ export function activate(context: vscode.ExtensionContext) {
     if (process.env["USERPROFILE"] !== undefined) {
         //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Projects", "ExternalProfilerDriver",
         //        "ExternalProfilerDriver","ExternalProfilerDriver","bin","Debug","ExternalProfilerDriver.exe");
-        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "delete","main.exe");
+        let profilerDirPath = path.join('projects','ExternalProfilerDriver', 'ExternalProfilerDriver', 'bin', 'Debug', 'netcoreapp2.0', 'publish');
+        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), profilerDirPath, "ExternalProfilerDriver.dll");
+        console.log(`Testing External profiler driver in ${profilerDriverPath}.`);
         
         if (! fs.existsSync(profilerDriverPath)) {
             console.log("Cannot find path to external profiler driver");
@@ -72,7 +74,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(d3Extension); 
 
     let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
-       vscode.window.showInformationMessage('Trying to display a d3-powered view!');
+       // vscode.window.showInformationMessage('Trying to display a d3-powered view!');
        if (currentPanel) {
          currentPanel.reveal(vscode.ViewColumn.Two);
        } else {
@@ -88,7 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
          }, undefined, context.subscriptions);
        }
-       vscode.window.showInformationMessage('Should have displayed a d3-powered view!');
+       //vscode.window.showInformationMessage('Should have displayed a d3-powered view!');
     });
 
     /*
@@ -117,7 +119,7 @@ export function getHtmlContent(extensionPath : string) : string {
 
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
     let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data.json"), "utf8");
-    console.log(`data found ${datajson}.`);
+    // console.log(`data found ${datajson}.`);
     const columns = [
                     ['KindofOpen', 4],
                     ['Closedx', 2],
