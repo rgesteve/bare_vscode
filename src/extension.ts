@@ -42,7 +42,6 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(`Extension "callVTune" is now active, running from ${profilerDriverPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
 
-    /*
     let textEditor = vscode.window.activeTextEditor;
     if (!textEditor) {
         vscode.window.showErrorMessage("No document selected.");
@@ -55,21 +54,31 @@ export function activate(context: vscode.ExtensionContext) {
         /// }
         vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
     }
-    */
 
     let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, tmpfile, <string>(profilerDriverPath), currentPanel);
     d3Extension.testOutput("Trying to output to channel");
     currentPanel.webview.onDidReceiveMessage(msg => {
-        vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
+        //vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
         //sourcePanel = vscode.window.createWebviewPanel("Source", "Source Panel", vscode.ViewColumn.Three, { enableScripts : true } );
         //sourcePanel.webview.html = getSourceWebviewContent();
-        // var uri = vscode.Uri.file("C:\\Users\\clairiky\\Work\\WOS\\PTVS\\examples\\cython\\cython_example_proj\\__init__.py");
-        // vscode.workspace.openTextDocument(uri).then(doc => {
-        //     vscode.window.showTextDocument(doc);
-		// 	console.log('Source file opened');
-		// }, err => {
-		// 	console.log(`Failed to load '${uri.toString()}'\n\n${String(err)}`, '');
-		// });
+        let docToOpenPath : string = "c:\\users\\perf\\projects\\examples\\pybind\\src\\MonteCarloPi.cpp";
+        if (msg.command === "should_open") {
+            // should be getting name of file to open from ${msg.text}
+            // the command below doesn't work, it asks user for input on what file to open
+            //      vscode.commands.executeCommand("workbench.action.files.openFile", docToOpenPath);
+            var uri = vscode.Uri.file(docToOpenPath);
+            vscode.workspace.openTextDocument(uri).then(doc => {
+                vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.One });
+		        console.log('Source file opened');
+		    }, err => {
+		        console.log(`Failed to load '${uri.toString()}'\n\n${String(err)}`, '');
+            });
+
+        } else {
+            /* empty */
+        }
+        // vscode.window.showInformationMessage(`Should've opened a file...`);
+
      }, undefined, context.subscriptions);
     context.subscriptions.push(d3Extension); 
 
@@ -87,7 +96,16 @@ export function activate(context: vscode.ExtensionContext) {
              context.subscriptions
          );
          currentPanel.webview.onDidReceiveMessage(msg => {
-            vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
+             /*
+            let toDisplay = `Seems like I got a message ${msg.command}!, checking:\n`;
+            if (msg.command === "should_open") {
+                toDisplay += `\tShould be opening file "${msg.text}"`;
+            } else {
+                toDisplay += "\t*** Got a command without open directive";
+            }
+            vscode.window.showInformationMessage(toDisplay);
+            */
+           vscode.window.showInformationMessage("Testing message");
          }, undefined, context.subscriptions);
        }
        //vscode.window.showInformationMessage('Should have displayed a d3-powered view!');
