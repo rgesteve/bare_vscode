@@ -36,7 +36,7 @@ export class D3Extension
         let errString : string = "";
 
         channel.appendLine("Profiler starting...");
-
+        let p = cp.spawn(this._profilerBinPath, ['-p']);
         /*
         if (this._panel) {
             this._panel.reveal(vscode.ViewColumn.Two);
@@ -50,7 +50,7 @@ export class D3Extension
         }
         */
 
-        let p = cp.spawn('dotnet', [this._profilerBinPath, '--', 'c:\\users\\perf\\appdata\\local\\continuum\\anaconda3\\python.exe', 'c:\\users\\perf\\projects\\examples\\pybind\\test\\test.py']);
+        //let p = cp.spawn('dotnet', [this._profilerBinPath, '--', 'c:\\users\\perf\\appdata\\local\\continuum\\anaconda3\\python.exe', 'c:\\users\\perf\\projects\\examples\\pybind\\test\\test.py']);
         //dotnet C:\Users\perf\projects\ExternalProfilerDriver\ExternalProfilerDriver\bin\Debug\netcoreapp2.0\publish\ExternalProfilerDriver.dll -- c:\users\perf\appdata\local\continuum\anaconda3\python.exe c:\users\perf\projects\examples\pybind\test\test.py
 
        // let p = cp.spawn(this._profilerBinPath, [this._tmpfile]);

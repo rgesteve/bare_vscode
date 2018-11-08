@@ -20,9 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (process.env["USERPROFILE"] !== undefined) {
         //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Projects", "ExternalProfilerDriver",
         //        "ExternalProfilerDriver","ExternalProfilerDriver","bin","Debug","ExternalProfilerDriver.exe");
-        let profilerDirPath = path.join('projects','ExternalProfilerDriver', 'ExternalProfilerDriver', 'bin', 'Debug', 'netcoreapp2.0', 'publish');
-        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), profilerDirPath, "ExternalProfilerDriver.dll");
-        console.log(`Testing External profiler driver in ${profilerDriverPath}.`);
+        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "delete","main.exe");
         
         if (! fs.existsSync(profilerDriverPath)) {
             console.log("Cannot find path to external profiler driver");
@@ -138,6 +136,7 @@ export function getHtmlContent(extensionPath : string) : string {
 
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
     let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data.json"), "utf8");
+    let timejson = fs.readFileSync(path.join(resourcePath, "/data/time.json"), "utf8");
     // console.log(`data found ${datajson}.`);
     const columns = [
                     ['KindofOpen', 4],
@@ -150,6 +149,7 @@ export function getHtmlContent(extensionPath : string) : string {
     let result = interpolateTemplate(htmlTemplate, {
         columnsFromHost : JSON.stringify(columns),// kind of stupid, but haven't found a better way yet
         columnsFromHost2 : datajson,
+        timejson : timejson,
         script : scriptPath,
         bundleUri : bundleUri
     });

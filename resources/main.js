@@ -218,6 +218,7 @@ new Vue({
 
      let data = JSON.parse(document.getElementById("dataDiv").textContent);
      let data2 = JSON.parse(document.getElementById("dataDiv2").textContent);
+     let cpu_util = JSON.parse(document.getElementById("cpu").textContent);
       // a second chart
       var chart = c3.generate({
           bindto: '#visitor',
@@ -271,6 +272,13 @@ new Vue({
           }
       });
 
+      var chart2 = c3.generate({
+        bindto: '#chart3',
+        data: {
+            json: cpu_util,
+            type: "area",
+        }
+    });
      //  Handle a message inside the webview
      document.getElementById("message").textContent = "hello";
       window.addEventListener('message', event => {
