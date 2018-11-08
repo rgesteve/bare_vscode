@@ -15,6 +15,7 @@ function interpolateTemplate(template: string, params : Object) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+
     let profilerDriverPath : string | undefined = undefined;
     if (process.env["USERPROFILE"] !== undefined) {
         //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Projects", "ExternalProfilerDriver",
@@ -39,19 +40,20 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(`Extension "callVTune" is now active, running from ${profilerDriverPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
 
+    /*
     let textEditor = vscode.window.activeTextEditor;
     if (!textEditor) {
         vscode.window.showErrorMessage("No document selected.");
         return;
     } else {
         let doc = textEditor.document;
-
-        if (!doc || doc.languageId != "python") {
-           vscode.window.showErrorMessage("Please invoke this command from a Python file.");
-           return;
-        } 
-      vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
+        /// if (!doc || doc.languageId != "python") {
+        ///   vscode.window.showErrorMessage("Please invoke this command from a Python file.");
+        ///   return;
+        /// }
+        vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
     }
+    */
 
     let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, tmpfile, <string>(profilerDriverPath), currentPanel);
     d3Extension.testOutput("Trying to output to channel");
@@ -68,8 +70,9 @@ export function activate(context: vscode.ExtensionContext) {
 		// });
      }, undefined, context.subscriptions);
     context.subscriptions.push(d3Extension); 
-    let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
 
+    let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
+       vscode.window.showInformationMessage('Trying to display a d3-powered view!');
        if (currentPanel) {
          currentPanel.reveal(vscode.ViewColumn.Two);
        } else {
@@ -85,18 +88,17 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
          }, undefined, context.subscriptions);
        }
-       vscode.window.showInformationMessage('Displaying a d3-powered view!');
+       vscode.window.showInformationMessage('Should have displayed a d3-powered view!');
     });
 
-
-
-
+    /*
     context.subscriptions.push(vscode.commands.registerCommand('extension.refactor', () => {
         if (currentPanel) {
             currentPanel.webview.postMessage({ command : 'refactor'});
             vscode.window.showInformationMessage("Going to try to invoke the command");
         }
     }));
+    */
     context.subscriptions.push(createPanelDisposable);
 }
 
@@ -108,6 +110,7 @@ export function deactivate() {
 export function getHtmlContent(extensionPath : string) : string {
     let resourcePath = path.join(extensionPath, 'resources');
     let scriptPath = vscode.Uri.file(path.join(resourcePath, 'main.js')).with({ scheme : 'vscode-resource'});
+    let bundleUri = vscode.Uri.file(path.join(resourcePath, 'bundle.js')).with({ scheme: 'vscode-resource'});
     // Async read
     //let datajson = fs.readFile(path.join(resourcePath, "/data/data2.json"), "utf8", 
     //                function(err, contents){console.log(`data found ${contents}.`);});
@@ -126,7 +129,8 @@ export function getHtmlContent(extensionPath : string) : string {
     let result = interpolateTemplate(htmlTemplate, {
         columnsFromHost : JSON.stringify(columns),// kind of stupid, but haven't found a better way yet
         columnsFromHost2 : datajson,
-        script : scriptPath
+        script : scriptPath,
+        bundleUri : bundleUri
     });
     
     return result;

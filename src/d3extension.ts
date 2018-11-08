@@ -36,6 +36,19 @@ export class D3Extension
         let channel : vscode.OutputChannel = this._output;
         let errString : string = "";
 
+        if (this._panel) {
+            this._panel.reveal(vscode.ViewColumn.Two);
+            this._panel.webview.html = getHtmlContent(this._rootPath);
+            //this._panel.webview.postMessage({ command : 'refactor'});
+            this._status.text = "Done!";
+            this._status.show();
+            console.log("Done sending command");
+        } else {
+            console.log("No panel to display");
+        }
+
+        /*
+
       // let p = cp.spawn(this._profilerBinPath, ['-p']);
        let p = cp.spawn(this._profilerBinPath, [this._tmpfile]);
        p.stdout.on("data", (data : string | Buffer) : void => {
@@ -66,6 +79,7 @@ export class D3Extension
 
            }
        });
+       */
 
         // this._output.appendLine(`Received a message: ${message}.`);
     }
