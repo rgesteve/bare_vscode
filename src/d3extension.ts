@@ -76,7 +76,7 @@ export class D3Extension
                 this._panel.reveal(vscode.ViewColumn.Two);
                 this._panel.webview.html = getHtmlContent(this._rootPath);
                 //this._panel.webview.postMessage({ command : 'refactor'});
-                this._status.text = "Done!";
+                this._status.text = "Profiler Done!";
                 this._status.show();
                 console.log("Done sending command");
               }

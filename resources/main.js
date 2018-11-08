@@ -238,9 +238,11 @@ new Vue({
           legend: {
               hide: true
           },
+          /*
           color: {
               pattern: ['#40c4ff', '#2961ff', '#ff821c', '#7e74fb']
           }
+          */
       });
 
       var dataset = [ 5, 10, 15, 20, 25 ];
