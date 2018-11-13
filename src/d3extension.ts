@@ -16,6 +16,7 @@ export class D3Extension
     private _result : string;
     private _panel: vscode.WebviewPanel|undefined;
     private _status : vscode.StatusBarItem ;
+
     constructor(rootPath : string, tmpfile : string,  binPath : string, panel: vscode.WebviewPanel | undefined) {
         this._output = vscode.window.createOutputChannel("Python profiler");
         this._rootPath = rootPath;
@@ -50,7 +51,7 @@ export class D3Extension
         }
         */
 
-        //let p = cp.spawn('dotnet', [this._profilerBinPath, '--', 'c:\\users\\perf\\appdata\\local\\continuum\\anaconda3\\python.exe', 'c:\\users\\perf\\projects\\examples\\pybind\\test\\test.py']);
+        //let p = cp.spawn('dotnet', [this._profilerBinPath, '--', 'C:\\Users\\clairiky\\anaconda3\\envs\\bare_vscode\\python.exe', 'C:\\Users\\clairiky\\Work\\WOS\\PTVS\\examples\\pybind\\test\\test.py']);
         //dotnet C:\Users\perf\projects\ExternalProfilerDriver\ExternalProfilerDriver\bin\Debug\netcoreapp2.0\publish\ExternalProfilerDriver.dll -- c:\users\perf\appdata\local\continuum\anaconda3\python.exe c:\users\perf\projects\examples\pybind\test\test.py
 
        // let p = cp.spawn(this._profilerBinPath, [this._tmpfile]);

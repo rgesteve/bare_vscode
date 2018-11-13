@@ -22,6 +22,10 @@ export function activate(context: vscode.ExtensionContext) {
         //        "ExternalProfilerDriver","ExternalProfilerDriver","bin","Debug","ExternalProfilerDriver.exe");
         profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "delete","main.exe");
         
+        //let profilerDirPath = path.join('projects','ExternalProfilerDriver', 'ExternalProfilerDriver', 'bin', 'Debug', 'netcoreapp2.0', 'publish');
+        //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "WOS", "PTVS", "ExternalProfilerDriver", "ExternalProfilerDriver", "bin", "Debug", "netcoreapp2.0", "publish", "ExternalProfilerDriver.dll");
+        console.log(`Testing External profiler driver in ${profilerDriverPath}.`);
+
         if (! fs.existsSync(profilerDriverPath)) {
             console.log("Cannot find path to external profiler driver");
             console.log(`path is ${profilerDriverPath}"`);
@@ -35,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
     let tmpfile = path.join(os.tmpdir(),'out.txt');
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
     let sourcePanel : vscode.WebviewPanel | undefined = undefined;
+
     currentPanel = vscode.window.createWebviewPanel("testType", "Profile summary", vscode.ViewColumn.Two, { enableScripts : true } );
 
     console.log(`Extension "callVTune" is now active, running from ${profilerDriverPath}.`);
@@ -45,12 +50,13 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage("No document selected.");
         return;
     } else {
-        /// let doc = textEditor.document;
-        /// if (!doc || doc.languageId != "python") {
-        ///   vscode.window.showErrorMessage("Please invoke this command from a Python file.");
-        ///   return;
-        /// }
-        /// vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
+        let doc = textEditor.document;
+        if (!doc || doc.languageId != "python") {
+          vscode.window.showErrorMessage("Please invoke this command from a Python file.");
+          return;
+        }
+        vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
+   
         /* TODO -- verify that the active document is a Python script */
     }
 
@@ -82,7 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(d3Extension); 
 
     let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
-       // vscode.window.showInformationMessage('Trying to display a d3-powered view!');
+
        if (currentPanel) {
          currentPanel.reveal(vscode.ViewColumn.Two);
        } else {
@@ -107,17 +113,7 @@ export function activate(context: vscode.ExtensionContext) {
            vscode.window.showInformationMessage("Testing message");
          }, undefined, context.subscriptions);
        }
-       //vscode.window.showInformationMessage('Should have displayed a d3-powered view!');
     });
-
-    /*
-    context.subscriptions.push(vscode.commands.registerCommand('extension.refactor', () => {
-        if (currentPanel) {
-            currentPanel.webview.postMessage({ command : 'refactor'});
-            vscode.window.showInformationMessage("Going to try to invoke the command");
-        }
-    }));
-    */
     context.subscriptions.push(createPanelDisposable);
 }
 
@@ -136,20 +132,9 @@ export function getHtmlContent(extensionPath : string) : string {
 
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
     let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data.json"), "utf8");
-    let timejson = fs.readFileSync(path.join(resourcePath, "/data/time.json"), "utf8");
-    // console.log(`data found ${datajson}.`);
-    const columns = [
-                    ['KindofOpen', 4],
-                    ['Closedx', 2],
-                    ['InProgress', 2],
-                    ['Testing', 5],
-                    ['Other', 1],
-    ];
 
     let result = interpolateTemplate(htmlTemplate, {
-        columnsFromHost : JSON.stringify(columns),// kind of stupid, but haven't found a better way yet
-        columnsFromHost2 : datajson,
-        timejson : timejson,
+        profileData : datajson,
         script : scriptPath,
         bundleUri : bundleUri
     });
