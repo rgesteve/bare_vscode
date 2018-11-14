@@ -20,10 +20,10 @@ export function activate(context: vscode.ExtensionContext) {
     if (process.env["USERPROFILE"] !== undefined) {
         //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Projects", "ExternalProfilerDriver",
         //        "ExternalProfilerDriver","ExternalProfilerDriver","bin","Debug","ExternalProfilerDriver.exe");
-        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "delete","main.exe");
+        //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "delete","main.exe");
         
         //let profilerDirPath = path.join('projects','ExternalProfilerDriver', 'ExternalProfilerDriver', 'bin', 'Debug', 'netcoreapp2.0', 'publish');
-        //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "WOS", "PTVS", "ExternalProfilerDriver", "ExternalProfilerDriver", "bin", "Debug", "netcoreapp2.0", "publish", "ExternalProfilerDriver.dll");
+        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "WOS", "PTVS", "ExternalProfilerDriver", "ExternalProfilerDriver", "bin", "Debug", "netcoreapp2.0", "publish", "ExternalProfilerDriver.dll");
         console.log(`Testing External profiler driver in ${profilerDriverPath}.`);
 
         if (! fs.existsSync(profilerDriverPath)) {
@@ -36,7 +36,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     let extensionPath = context.extensionPath;
     let mediaPath = path.join(extensionPath, 'resources');
-    let tmpfile = path.join(os.tmpdir(),'out.txt');
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
     let sourcePanel : vscode.WebviewPanel | undefined = undefined;
 
@@ -60,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
         /* TODO -- verify that the active document is a Python script */
     }
 
-    let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, tmpfile, <string>(profilerDriverPath), currentPanel);
+    let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, <string>(profilerDriverPath), currentPanel);
     d3Extension.testOutput("Trying to output to channel");
     currentPanel.webview.onDidReceiveMessage(msg => {
         //vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
@@ -131,7 +130,7 @@ export function getHtmlContent(extensionPath : string) : string {
     //                function(err, contents){console.log(`data found ${contents}.`);});
 
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
-    let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data.json"), "utf8");
+    let datajson = fs.readFileSync(path.join(os.tmpdir(), "output.json"), "utf8");
 
     let result = interpolateTemplate(htmlTemplate, {
         profileData : datajson,
