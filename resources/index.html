@@ -19,7 +19,8 @@
         height: 100%;
         margin: auto;
         padding: 15px;
-        overflow-x: auto;
+        /*overflow-x: auto;*/
+        overflow: auto
       }
 
       .c3 {
@@ -42,33 +43,28 @@
   </head>
   
   <body>
+    <div class="container">
+      <div id="profileData" style="display: none;">${profileData}</div>
+      <h1>Mixed-mode profiling summary</h1>
+      <h2>Timeline chart</h2>
+      <div id="timeline" style="height:290px; width:100%;"></div>
 
-    <h1>Mixed-mode profiling summary</h1>
-    <h2>Timeline chart</h2>
-    <div id="vuec3chart"></div>
 
-    <!-- <h2>Timeline chart</h2> -->
-    <div id="testcontainer" class="container">
       <h2 style="display: none">Local lines counter</h2>
       <div style="display: none" id="lines-of-code-counter">0</div>
-
       <h2 style="display: none">Latest communication from host</h2>
       <div style="display: none" id="latest-comm"></div>
       <h2 style="display: none">Message</h2>
       <div style="display: none" id="message">0</div>
-
+      
       <h2>Module breakdown</h2>
-      <div id="dataDiv" style="display: none;">${columnsFromHost}</div>
-      <div id="dataDiv2" style="display: none;">${columnsFromHost2}</div>
-      <div id="visitor" style="height:290px; width:100%;"></div>
+      <div id="modules" style="height:290px; width:100%;"></div>
 
-      <div style="box-sizing: border-box; padding-top: 30px; height: 100%;">
-        <h2>Hot functions</h2>
-        <div style="margin-bottom:4px"><input placeholder="Filter..." type="text" id="filter-textbox" oninput="onTextboxFilterChanged()" /></div>
-        <div id="myGrid" class="ag-theme-dark" style="width: 100%; height: 100%;"></div>
-      </div>
+      <h2>Hot functions</h2>
+      <div style="margin-bottom:4px"><input placeholder="Filter..." type="text" id="filter-textbox" oninput="onTextboxFilterChanged()" /></div>
+      <div id="myGrid" class="ag-theme-blue" style="height: 300px; overflow-x: auto"></div>
     </div>
-
     <script src="${script}"></script>
+
   </body>
 </html>

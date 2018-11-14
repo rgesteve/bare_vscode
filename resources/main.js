@@ -1,200 +1,3 @@
-/*
-new Vue({
-          el: "#vuec3chart",
-          mounted: function() {
-              c3.generate({
-              bindto: this.$el,
-              data: {
-                  type: "area",
-                  x: "x",
-                  xFormat: "%H:%M",
-                  columns: [
-                     [
-                       "x",
-                       "12:38",
-                       "12:39",
-                       "12:40",
-                       "12:41",
-                       "12:42",
-                       "12:43",
-                       "12:44",
-                       "12:45",
-                       "12:46",
-                       "12:47",
-                       "12:48",
-                       "12:49",
-                       "12:50",
-                       "12:51",
-                       "12:52",
-                       "12:53",
-                       "12:54",
-                       "12:55",
-                       "12:56",
-                       "12:57",
-                       "12:58",
-                       "12:59",
-                     ],
-                     [
-                       "write",
-                       9884,
-                       1353,
-                       2243,
-                       3302,
-                       3443,
-                       5731,
-                       4163,
-                       8329,
-                       8809,
-                       3145,
-                       5843,
-                       9190,
-                       0899,
-                       6873,
-                       7113,
-                       0870,
-                       0700,
-                       8144,
-                       8624,
-                       9513,
-                       6307,
-                       6307,
-                     ],
-                     [
-                       "read",
-                       848,
-                       536,
-                       432,
-                       024,
-                       432,
-                       312,
-                       632,
-                       296,
-                       096,
-                       456,
-                       432,
-                       904,
-                       992,
-                       736,
-                       136,
-                       704,
-                       808,
-                       440,
-                       240,
-                       136,
-                       072,
-                       073,
-                     ]
-                  ]             
-                },              
-            axis: {
-              x: {
-                  type: "timeseries",
-                  tick: {
-                      format: '%H:%M'
-                  }
-              }
-            }
-      });
-    }
-  });
-  */
-
-  function graphSeries() {
-    c3.generate({
-            bindto: "#vuec3chart",
-            data: {
-                type: "area",
-                x: "x",
-                xFormat: "%H:%M",
-                columns: [
-                   [
-                     "x",
-                     "12:38",
-                     "12:39",
-                     "12:40",
-                     "12:41",
-                     "12:42",
-                     "12:43",
-                     "12:44",
-                     "12:45",
-                     "12:46",
-                     "12:47",
-                     "12:48",
-                     "12:49",
-                     "12:50",
-                     "12:51",
-                     "12:52",
-                     "12:53",
-                     "12:54",
-                     "12:55",
-                     "12:56",
-                     "12:57",
-                     "12:58",
-                     "12:59",
-                   ],
-                   [
-                     "write",
-                     9884,
-                     1353,
-                     2243,
-                     3302,
-                     3443,
-                     5731,
-                     4163,
-                     8329,
-                     8809,
-                     3145,
-                     5843,
-                     9190,
-                     0899,
-                     6873,
-                     7113,
-                     0870,
-                     0700,
-                     8144,
-                     8624,
-                     9513,
-                     6307,
-                     6307,
-                   ],
-                   [
-                     "read",
-                     848,
-                     536,
-                     432,
-                     024,
-                     432,
-                     312,
-                     632,
-                     296,
-                     096,
-                     456,
-                     432,
-                     904,
-                     992,
-                     736,
-                     136,
-                     704,
-                     808,
-                     440,
-                     240,
-                     136,
-                     072,
-                     073,
-                   ]
-                ]             
-              },              
-          axis: {
-            x: {
-                type: "timeseries",
-                tick: {
-                    format: '%H:%M'
-                }
-            }
-          }
-    });
-  }
-
   (function () {
       const vscode = acquireVsCodeApi();
       window.vscode = vscode;
@@ -213,16 +16,30 @@ new Vue({
           }
       }, 500);
 
-      // first chart
-      graphSeries();
+     let profileData = JSON.parse(document.getElementById("profileData").textContent);
+         
+     let moduleDistribution = profileData.module_attribution;
+     var modules = [];
+     moduleDistribution.forEach(function(element) {
+        modules.push(Array(element.module, element.fraction));
+      });
 
-     let data = JSON.parse(document.getElementById("dataDiv").textContent);
-     let data2 = JSON.parse(document.getElementById("dataDiv2").textContent);
-      // a second chart
+      // CPU Timeline chart
       var chart = c3.generate({
-          bindto: '#visitor',
+        bindto: '#timeline',
+        data: {
+          json: {
+              "cpu" : profileData.cpu
+          } ,
+          type: "area"
+        }
+        });
+
+      // Modules chart
+      var chart = c3.generate({
+          bindto: '#modules',
           data: {
-              columns : data,
+              columns : modules,
               type: 'donut',
               tooltip: {
                   show: true
@@ -237,37 +54,6 @@ new Vue({
           },
           legend: {
               hide: true
-          },
-          /*
-          color: {
-              pattern: ['#40c4ff', '#2961ff', '#ff821c', '#7e74fb']
-          }
-          */
-      });
-
-      var dataset = [ 5, 10, 15, 20, 25 ];
-      var chart = c3.generate({
-       bindto: '#chart',
-       data: {
-         columns: [
-           ['data1', 30, 200, 100, 400, 150, 250],
-           ['data2', 50, 20, 10, 40, 15, 25]
-         ],
-         axes: {
-           data2: 'y2' // ADD
-         }
-       },
-       axis: {
-         y2: {
-           show: true // ADD
-         }
-       }
-       });
-
-       var chart = c3.generate({
-          bindto: '#chart2',
-          data: {
-              json: data2
           }
       });
 
@@ -309,6 +95,8 @@ var columnDefs = [
     {headerName: "Start Address", field: "start_address"}
 ];
 
+var minRowHeight = 5;
+var currentRowHeight = minRowHeight;
 var gridOptions = {
     columnDefs: columnDefs,
     enableSorting: true,
@@ -362,14 +150,24 @@ function onTextboxFilterChanged() {
     gridOptions.api.setQuickFilter(value);
 }
 
+
 // setup the grid after the page has finished loading
 document.addEventListener('DOMContentLoaded', function() {
-    var gridDiv = document.querySelector('#myGrid');
-    var dataTxt = document.querySelector('#dataDiv2').textContent;
+    //ag-grid setting up the appropriate theme
+    if(document.body.className == "vscode-light"){
+        document.getElementById("myGrid").classList.remove('ag-theme-dark');
+        document.getElementById("myGrid").classList.add('ag-theme-blue');
+    } else {
+        document.getElementById("myGrid").classList.remove('ag-theme-blue');
+        document.getElementById("myGrid").classList.add('ag-theme-dark');
+    }   
+    var gridDiv = document.querySelector('#myGrid');  
+    var dataTxt = document.querySelector('#profileData').textContent;
     var data = JSON.parse(dataTxt);
 
     new agGrid.Grid(gridDiv, gridOptions);
     gridOptions.api.sizeColumnsToFit();
-    gridOptions.api.setRowData(data);
-    gridOptions.api.setRowData(JSON.parse(data));
+    gridOptions.api.setRowData(data.frames.frames);
+    console.log(data.frames.frames);
+    //gridOptions.api.setRowData(JSON.parse(data));
 });

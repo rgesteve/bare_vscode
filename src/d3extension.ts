@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
 import * as fs from 'fs';
+import * as os from 'os';
 import {getHtmlContent} from './extension';
 
 
@@ -11,16 +12,15 @@ export class D3Extension
 {
     private _output : vscode.OutputChannel;
     private _rootPath : string;
-    private _tmpfile : string;
     private _profilerBinPath : string;
     private _result : string;
     private _panel: vscode.WebviewPanel|undefined;
     private _status : vscode.StatusBarItem ;
-    constructor(rootPath : string, tmpfile : string,  binPath : string, panel: vscode.WebviewPanel | undefined) {
+
+    constructor(rootPath : string, binPath : string, panel: vscode.WebviewPanel | undefined) {
         this._output = vscode.window.createOutputChannel("Python profiler");
         this._rootPath = rootPath;
         this._profilerBinPath = binPath;
-        this._tmpfile = tmpfile;
         this._result  = "";
         this._panel = panel;
         this._status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 25);
@@ -36,7 +36,8 @@ export class D3Extension
         let errString : string = "";
 
         channel.appendLine("Profiler starting...");
-
+        
+        //let p = cp.spawn(this._profilerBinPath, ['-p']);
         /*
         if (this._panel) {
             this._panel.reveal(vscode.ViewColumn.Two);
@@ -49,11 +50,24 @@ export class D3Extension
             console.log("No panel to display");
         }
         */
+       let textEditor = vscode.window.activeTextEditor;
+       
+       if (!textEditor) {
+           vscode.window.showErrorMessage("No document selected.");
+           return;
+       } else {
+           let doc = textEditor.document;
+           if (!doc || doc.languageId != "python") {
+             vscode.window.showErrorMessage("Please invoke this command from a Python file.");
+             return;
+           }
+           vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
+           console.log(`this file is open now ${doc.fileName}`);
+  
+       }
 
-        let p = cp.spawn('dotnet', [this._profilerBinPath, '--', 'c:\\users\\perf\\appdata\\local\\continuum\\anaconda3\\python.exe', 'c:\\users\\perf\\projects\\examples\\pybind\\test\\test.py']);
-        //dotnet C:\Users\perf\projects\ExternalProfilerDriver\ExternalProfilerDriver\bin\Debug\netcoreapp2.0\publish\ExternalProfilerDriver.dll -- c:\users\perf\appdata\local\continuum\anaconda3\python.exe c:\users\perf\projects\examples\pybind\test\test.py
+        let p = cp.spawn('dotnet', [this._profilerBinPath, '-d', os.tmpdir(), '-j', '--', 'C:\\Users\\clairiky\\anaconda3\\envs\\bare_vscode\\python.exe', textEditor.document.fileName]);
 
-       // let p = cp.spawn(this._profilerBinPath, [this._tmpfile]);
        p.stdout.on("data", (data : string | Buffer) : void => {
            channel.append(data.toString());
            this._status.text = "Profiler running ..."; this._status.show();
@@ -67,15 +81,10 @@ export class D3Extension
 
        p.on('exit', (exitCode : number) : void => {
            channel.appendLine("Profiler signaled completion!");
-           if (exitCode === 0) {
-            // read the file here?
-            //console.log(`the file to be read is ${this._tmpfile}`);
-            //this._result = fs.readFileSync(this._tmpfile, "utf8");
-            
+           if (exitCode === 0) {          
             if (this._panel) {
                 this._panel.reveal(vscode.ViewColumn.Two);
                 this._panel.webview.html = getHtmlContent(this._rootPath);
-                //this._panel.webview.postMessage({ command : 'refactor'});
                 this._status.text = "Profiler Done!";
                 this._status.show();
                 console.log("Done sending command");
