@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
         //vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
         //sourcePanel = vscode.window.createWebviewPanel("Source", "Source Panel", vscode.ViewColumn.Three, { enableScripts : true } );
         //sourcePanel.webview.html = getSourceWebviewContent();
-        let docToOpenPath : string = "c:\\users\\perf\\projects\\examples\\pybind\\src\\MonteCarloPi.cpp";
+        let docToOpenPath : string = "C:\\Users\\clairiky\\Work\\WOS\\PTVS\\examples\\pybind\\src\\MonteCarloPi.cpp";
         if (msg.command === "should_open") {
             // should be getting name of file to open from ${msg.text}
             // the command below doesn't work, it asks user for input on what file to open
@@ -131,6 +131,7 @@ export function getHtmlContent(extensionPath : string) : string {
 
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
     let datajson = fs.readFileSync(path.join(os.tmpdir(), "output.json"), "utf8");
+    //let datajson = fs.readFileSync(path.join(resourcePath, "/data/kmeans-tiny-nomkl.json"), "utf8");
 
     let result = interpolateTemplate(htmlTemplate, {
         profileData : datajson,
