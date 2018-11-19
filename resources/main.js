@@ -33,8 +33,8 @@
       });
     modules.push(Array('others', othersFraction));
     
-    var time = ['x'];
-    var cpu = ['cpu'];
+    var time = ['x', 0];
+    var cpu = ['cpu', 0];
 
     profileData.cpu.forEach(function(element) {
        cpu.push(element);
@@ -54,6 +54,12 @@
             columns: [time, cpu],
             type: 'area-spline'
             
+        },
+        axis: {
+            x: {
+                padding: {left: 0},
+                min: 0
+            }
         }
     });
 
