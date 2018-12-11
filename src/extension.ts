@@ -131,7 +131,6 @@ export function getHtmlContent(extensionPath : string) : string {
 
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
     let datajson = fs.readFileSync(path.join(os.tmpdir(), "output.json"), "utf8");
-    //let datajson = fs.readFileSync(path.join(resourcePath, "/data/kmeans-tiny-nomkl.json"), "utf8");
 
     let result = interpolateTemplate(htmlTemplate, {
         profileData : datajson,

@@ -42,10 +42,12 @@
     
     var i = 0;
     profileData.cpu.forEach(function() {
-        i += executionTime / (cpu.length - 1);
+        i += executionTime / (cpu.length - 2);
+        //console.log(`i is ${i}`)
         time.push( i.toFixed(3) );
     });
-   
+    //console.log(`Time lenght ${time.length}`);
+    //console.log(`CPU lenght ${cpu.length}`);
     // CPU utilization timeline chart
     var chart = c3.generate({
         bindto: '#timeline',
