@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
         //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "delete","main.exe");
         
         //let profilerDirPath = path.join('projects','ExternalProfilerDriver', 'ExternalProfilerDriver', 'bin', 'Debug', 'netcoreapp2.0', 'publish');
-        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "WOS", "PTVS", "ExternalProfilerDriver", "ExternalProfilerDriver", "bin", "Debug", "netcoreapp2.0", "publish", "ExternalProfilerDriver.dll");
+        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "PTVS", "ExternalProfilerDriver", "ExternalProfilerDriver", "bin", "Debug", "netcoreapp2.0", "publish", "ExternalProfilerDriver.dll");
         console.log(`Testing External profiler driver in ${profilerDriverPath}.`);
 
         if (! fs.existsSync(profilerDriverPath)) {

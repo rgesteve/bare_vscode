@@ -46,7 +46,7 @@
         //console.log(`i is ${i}`)
         time.push( i.toFixed(3) );
     });
-    //console.log(`Time lenght ${time.length}`);
+    //console.log(`Time length ${time.length}`);
     //console.log(`CPU lenght ${cpu.length}`);
     // CPU utilization timeline chart
     var chart = c3.generate({
