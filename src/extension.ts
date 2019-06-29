@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
         //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "delete","main.exe");
         
         //let profilerDirPath = path.join('projects','ExternalProfilerDriver', 'ExternalProfilerDriver', 'bin', 'Debug', 'netcoreapp2.0', 'publish');
-        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "WOS", "PTVS", "ExternalProfilerDriver", "ExternalProfilerDriver", "bin", "Debug", "netcoreapp2.0", "publish", "ExternalProfilerDriver.dll");
+        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "PTVS", "ExternalProfilerDriver", "ExternalProfilerDriver", "bin", "Debug", "netcoreapp2.0", "publish", "ExternalProfilerDriver.dll");
         console.log(`Testing External profiler driver in ${profilerDriverPath}.`);
 
         if (! fs.existsSync(profilerDriverPath)) {
@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
         //vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
         //sourcePanel = vscode.window.createWebviewPanel("Source", "Source Panel", vscode.ViewColumn.Three, { enableScripts : true } );
         //sourcePanel.webview.html = getSourceWebviewContent();
-        let docToOpenPath : string = "c:\\users\\perf\\projects\\examples\\pybind\\src\\MonteCarloPi.cpp";
+        let docToOpenPath : string = "C:\\Users\\clairiky\\Work\\WOS\\PTVS\\examples\\pybind\\src\\MonteCarloPi.cpp";
         if (msg.command === "should_open") {
             // should be getting name of file to open from ${msg.text}
             // the command below doesn't work, it asks user for input on what file to open

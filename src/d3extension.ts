@@ -65,9 +65,10 @@ export class D3Extension
            console.log(`this file is open now ${doc.fileName}`);
   
        }
-
-        let p = cp.spawn('dotnet', [this._profilerBinPath, '-d', os.tmpdir(), '-j', '--', 'C:\\Users\\clairiky\\anaconda3\\envs\\bare_vscode\\python.exe', textEditor.document.fileName]);
-
+       
+        let p = cp.spawn('dotnet', [this._profilerBinPath, '-d', os.tmpdir(), '-j', '--', 'C:\\Users\\perf\\AppData\\Local\\Continuum\\anaconda3\\python.exe', textEditor.document.fileName]);
+       //let p = cp.spawn('C:\\Users\\perf\\Anaconda3\\envs\\onnx_vscode_p3.6\\python.exe', ["C:\\Users\\perf\\PTVS\\bare_vscode\\test.py"]);
+        
        p.stdout.on("data", (data : string | Buffer) : void => {
            channel.append(data.toString());
            this._status.text = "Profiler running ..."; this._status.show();

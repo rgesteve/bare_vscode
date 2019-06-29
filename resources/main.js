@@ -19,25 +19,56 @@
      let profileData = JSON.parse(document.getElementById("profileData").textContent);
          
      let moduleDistribution = profileData.module_attribution;
+     let executionTime = profileData.total_time;
      var modules = [];
+     var othersFraction = 0;
      moduleDistribution.forEach(function(element) {
-        modules.push(Array(element.module, element.fraction));
+        if (element.fraction > 1) {
+            modules.push(Array(element.module, element.fraction));
+        }
+        else {
+            othersFraction += element.fraction;
+        }
+            
       });
+    modules.push(Array('others', othersFraction));
+    
+    var time = ['x', 0];
+    var cpu = ['cpu', 0];
 
-      // CPU Timeline chart
-      var chart = c3.generate({
+    profileData.cpu.forEach(function(element) {
+       cpu.push(element);
+     });
+    
+    var i = 0;
+    profileData.cpu.forEach(function() {
+        i += executionTime / (cpu.length - 2);
+        //console.log(`i is ${i}`)
+        time.push( i.toFixed(3) );
+    });
+    //console.log(`Time length ${time.length}`);
+    //console.log(`CPU lenght ${cpu.length}`);
+    // CPU utilization timeline chart
+    var chart = c3.generate({
         bindto: '#timeline',
         data: {
-          json: {
-              "cpu" : profileData.cpu
-          } ,
-          type: "area"
+            x:'x',
+            columns: [time, cpu],
+            type: 'area-spline'
+            
+        },
+        axis: {
+            x: {
+                padding: {left: 0},
+                min: 0
+            }
         }
-        });
+    });
 
       // Modules chart
       var chart = c3.generate({
           bindto: '#modules',
+
           data: {
               columns : modules,
               type: 'donut',
@@ -53,7 +84,8 @@
               width: 35,
           },
           legend: {
-              hide: true
+              hide: false,
+              position: 'right'
           }
       });
 
