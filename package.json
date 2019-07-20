@@ -13,7 +13,6 @@
     "activationEvents": [
         "onCommand:extension.testD3js",
         "onCommand:extension.refactor"
-
     ],
     "main": "./out/extension",
     "contributes": {
@@ -21,12 +20,12 @@
             {
                 "command": "extension.testD3js",
                 "title": "Profile",
-                "category" : "Python Profiler"
+                "category": "Python Profiler"
             },
             {
                 "command": "extension.refactor",
                 "title": "refactor",
-                "category" : "Python Profiler"
+                "category": "Python Profiler"
             }
         ]
     },
