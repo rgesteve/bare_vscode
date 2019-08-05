@@ -38,20 +38,20 @@
     },
     "devDependencies": {
         "@types/mocha": "^2.2.42",
-        "@types/node": "^8.10.25",
+        "@types/node": "^8.10.51",
         "css-loader": "^1.0.1",
         "style-loader": "^0.23.1",
-        "ts-loader": "^5.3.0",
+        "ts-loader": "^5.4.5",
         "typescript": "^2.6.1",
-        "vscode": "^1.1.21",
-        "webpack": "^4.25.1",
-        "webpack-cli": "^3.1.2"
+        "vscode": "^1.1.36",
+        "webpack": "^4.39.1",
+        "webpack-cli": "^3.3.6"
     },
     "dependencies": {
-        "ag-grid-community": "^19.1.1",
-        "c3": "^0.6.8",
-        "d3": "^5.7.0",
-        "jquery": "^3.3.1",
+        "ag-grid-community": "^19.1.4",
+        "c3": "^0.6.14",
+        "d3": "^5.9.7",
+        "jquery": "^3.4.1",
         "jquery-ui": "^1.12.1"
     }
 }
