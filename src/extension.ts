@@ -125,12 +125,14 @@ export function getHtmlContent(extensionPath : string) : string {
     let resourcePath = path.join(extensionPath, 'resources');
     let scriptPath = vscode.Uri.file(path.join(resourcePath, 'main.js')).with({ scheme : 'vscode-resource'});
     let bundleUri = vscode.Uri.file(path.join(resourcePath, 'bundle.js')).with({ scheme: 'vscode-resource'});
-    // Async read
-    //let datajson = fs.readFile(path.join(resourcePath, "/data/data2.json"), "utf8", 
-    //                function(err, contents){console.log(`data found ${contents}.`);});
 
+    /*
+    let datajson = fs.readFile(path.join(resourcePath, "/data/profile_data.json"), "utf8", 
+                    (err, contents) => {console.log(`data found ${contents}.`);});
+    */
+    let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data_good.json"), "utf8");
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
-    let datajson = fs.readFileSync(path.join(os.tmpdir(), "output.json"), "utf8");
+    //let datajson = fs.readFileSync(path.join(os.tmpdir(), "output.json"), "utf8");
 
     let result = interpolateTemplate(htmlTemplate, {
         profileData : datajson,
@@ -141,6 +143,7 @@ export function getHtmlContent(extensionPath : string) : string {
     return result;
 }
 
+/*
 function getSourceWebviewContent() {
     return `<!DOCTYPE html>
 <html lang="en">
@@ -154,3 +157,4 @@ function getSourceWebviewContent() {
 </body>
 </html>`;
 }
+*/

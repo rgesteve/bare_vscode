@@ -59,15 +59,18 @@ export class D3Extension
            channel.appendLine("Profiler signaled completion!");
            if (exitCode === 0) {
              channel.append(`I should be showing results now`);
-            // if (this._panel) {
-            //     this._panel.reveal(vscode.ViewColumn.Two);
-            //     this._panel.webview.html = getHtmlContent(this._rootPath);
-            // }
+            if (this._panel) {
+                channel.append("Generating html content...");
+                this._panel.reveal(vscode.ViewColumn.Two);
+                this._panel.webview.html = getHtmlContent(this._rootPath);
+            }
+             channel.append("Results should be showing now...");
              this._status.text = "Profiler Done!"; this._status.show();
            } else {
              vscode.window.showErrorMessage(`Error while driving profiler: ${errString}.`);
            }
        });
+
     }
 
     dispose() : void {

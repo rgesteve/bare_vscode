@@ -16,81 +16,95 @@
           }
       }, 500);
 
-     let profileData = JSON.parse(document.getElementById("profileData").textContent);
-         
-     let moduleDistribution = profileData.module_attribution;
-     let executionTime = profileData.total_time;
-     var modules = [];
-     var othersFraction = 0;
-     moduleDistribution.forEach(function(element) {
-        if (element.fraction > 1) {
-            modules.push(Array(element.module, element.fraction));
-        }
-        else {
-            othersFraction += element.fraction;
-        }
-            
-      });
-    modules.push(Array('others', othersFraction));
-    
-    var time = ['x', 0];
-    var cpu = ['cpu', 0];
+      var pdataElem = document.getElementById("profileData");
+      let profileData = undefined;
+      if (!pdataElem) {
+        console.log("----> Something element with the element<----");
+        return;
+      }
 
-    profileData.cpu.forEach(function(element) {
-       cpu.push(element);
-     });
-    
-    var i = 0;
-    profileData.cpu.forEach(function() {
-        i += executionTime / (cpu.length - 2);
-        //console.log(`i is ${i}`)
-        time.push( i.toFixed(3) );
-    });
-    //console.log(`Time lenght ${time.length}`);
-    //console.log(`CPU lenght ${cpu.length}`);
-    // CPU utilization timeline chart
-    var chart = c3.generate({
-        bindto: '#timeline',
-        data: {
-            x:'x',
-            columns: [time, cpu],
-            type: 'area-spline'
-            
-        },
-        axis: {
-            x: {
-                padding: {left: 0},
-                min: 0
+      try {
+        //let profileData = JSON.parse(document.getElementById("profileData").textContent);
+        profileData = JSON.parse(pdataElem.textContent);
+
+        let moduleDistribution = profileData.module_attribution;
+        let executionTime = profileData.total_time;
+        var modules = [];
+        var othersFraction = 0;
+
+        moduleDistribution.forEach((element) => {
+            if (element.fraction > 1) {
+                modules.push(Array(element.module, element.fraction));
+            } else {
+                othersFraction += element.fraction;
             }
-        }
-    });
+        });
+        modules.push(Array('others', othersFraction));
 
-      // Modules chart
-      var chart = c3.generate({
-          bindto: '#modules',
+        var time = ['x', 0];
+        var cpu = ['cpu', 0];
 
-          data: {
-              columns : modules,
-              type: 'donut',
-              tooltip: {
-                  show: true
-              }
-          },
-          donut: {
-              label: {
-                  show: false
-              },
-              title: "Modules",
-              width: 35,
-          },
-          legend: {
-              hide: false,
-              position: 'right'
-          }
-      });
+        profileData.cpu.forEach((element) => { 
+           cpu.push(element);
+        });
 
-     //  Handle a message inside the webview
+        var i = 0;
+        profileData.cpu.forEach(() => {
+            i += executionTime / (cpu.length - 2);
+            //console.log(`i is ${i}`)
+            time.push( i.toFixed(3) );
+        });
+        console.log(`Time array length ${time.length}`);
+        console.log(`CPU array length ${cpu.length}`);
+
+        // CPU utilization timeline chart
+        var chart = c3.generate({
+            bindto: '#timeline',
+            data: {
+                x:'x',
+                columns: [time, cpu],
+                type: 'area-spline'
+            },
+            axis: {
+                x: {
+                    padding: {left: 0},
+                    min: 0
+                }
+            }
+        });
+
+        // Modules chart
+        var chart = c3.generate({
+            bindto: '#modules',
+
+            data: {
+                columns : modules,
+                type: 'donut',
+                tooltip: {
+                    show: true
+                }
+            },
+            donut: {
+                label: {
+                    show: false
+                },
+                title: "Modules",
+                width: 35,
+            },
+            legend: {
+                hide: false,
+                position: 'right'
+            }
+        });
+
+      } catch (err) {
+        console.log("----> couldn't parse contents of profiledata, or couldn't find data in the right format <-----------");
+      }
+
+      /*
+            //  Handle a message inside the webview
      document.getElementById("message").textContent = "hello";
+
       window.addEventListener('message', event => {
           const message = event.data; // the message data the host sent
           //shouldDisplay.style.visibility = "visible";
@@ -101,6 +115,7 @@
           console.log("This should be displayed in the developer tools if they're open");
 
       });
+      */
   })();
 
   function linkRenderer(params) {
@@ -195,11 +210,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }   
     var gridDiv = document.querySelector('#myGrid');  
     var dataTxt = document.querySelector('#profileData').textContent;
-    var data = JSON.parse(dataTxt);
 
-    new agGrid.Grid(gridDiv, gridOptions);
-    gridOptions.api.sizeColumnsToFit();
-    gridOptions.api.setRowData(data.frames.frames);
-    console.log(data.frames.frames);
-    //gridOptions.api.setRowData(JSON.parse(data));
+    try {
+        var data = JSON.parse(dataTxt);
+        new agGrid.Grid(gridDiv, gridOptions);
+        gridOptions.api.sizeColumnsToFit();
+        gridOptions.api.setRowData(data.frames.frames);
+        console.log(data.frames.frames);
+        //gridOptions.api.setRowData(JSON.parse(data));
+    } catch (err) {
+        console.log(`Couldn't parse text, output follows: {dataTxt}`);
+    }
+
 });
