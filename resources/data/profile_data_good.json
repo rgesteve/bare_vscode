@@ -1,0 +1,23 @@
+{
+    "total_time": 7.034505,
+    "frames": {
+      "frames": [
+        {
+          "function": "Total",
+          "cpu_time": "7.034505",
+          "module": "[Unknown]",
+          "function_full": "[Unknown]",
+          "source_file": "[Unknown]",
+          "start_address": "[Unknown]"
+        }
+      ]
+    },
+    "cpu": [],
+    "module_attribution": [
+      {
+        "module": "[Unknown]",
+        "time": 7.034505,
+        "fraction": 100.0
+      }
+    ]
+  }
