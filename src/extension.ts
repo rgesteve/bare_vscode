@@ -130,7 +130,9 @@ export function getHtmlContent(extensionPath : string) : string {
     let datajson = fs.readFile(path.join(resourcePath, "/data/profile_data.json"), "utf8", 
                     (err, contents) => {console.log(`data found ${contents}.`);});
     */
-    let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data_good.json"), "utf8");
+    //let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data_good.json"), "utf8");
+    //let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data_pca_daal.json"), "utf8");
+    let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data_pca_vanilla.json"), "utf8");
     let htmlTemplate = fs.readFileSync(path.join(resourcePath, "index.html"), "utf8");
     //let datajson = fs.readFileSync(path.join(os.tmpdir(), "output.json"), "utf8");
 

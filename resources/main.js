@@ -47,7 +47,7 @@
         profileData.cpu.forEach((element) => { 
            cpu.push(element);
         });
-
+        
         var i = 0;
         profileData.cpu.forEach(() => {
             i += executionTime / (cpu.length - 2);
@@ -57,6 +57,7 @@
         console.log(`Time array length ${time.length}`);
         console.log(`CPU array length ${cpu.length}`);
 
+        /*
         // CPU utilization timeline chart
         var chart = c3.generate({
             bindto: '#timeline',
@@ -72,6 +73,7 @@
                 }
             }
         });
+        */
 
         // Modules chart
         var chart = c3.generate({
