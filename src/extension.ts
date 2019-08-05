@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
         //profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "delete","main.exe");
         
         //let profilerDirPath = path.join('projects','ExternalProfilerDriver', 'ExternalProfilerDriver', 'bin', 'Debug', 'netcoreapp2.0', 'publish');
-        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "Work", "WOS", "PTVS", "ExternalProfilerDriver", "ExternalProfilerDriver", "bin", "Debug", "netcoreapp2.0", "publish", "ExternalProfilerDriver.dll");
+        profilerDriverPath = path.join(<string>(process.env["USERPROFILE"]), "projects", "ExternalProfilerDriver", "ExternalProfilerDriver", "bin", "Debug", "netcoreapp2.0", "publish", "ExternalProfilerDriver.dll");
         console.log(`Testing External profiler driver in ${profilerDriverPath}.`);
 
         if (! fs.existsSync(profilerDriverPath)) {
@@ -44,28 +44,13 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(`Extension "callVTune" is now active, running from ${profilerDriverPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
 
-    let textEditor = vscode.window.activeTextEditor;
-    if (!textEditor) {
-        vscode.window.showErrorMessage("No document selected.");
-        return;
-    } else {
-        let doc = textEditor.document;
-        if (!doc || doc.languageId != "python") {
-          vscode.window.showErrorMessage("Please invoke this command from a Python file.");
-          return;
-        }
-        vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
-   
-        /* TODO -- verify that the active document is a Python script */
-    }
-
     let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, <string>(profilerDriverPath), currentPanel);
-    d3Extension.testOutput("Trying to output to channel");
+    //d3Extension.testOutput("Trying to output to channel"); // <--- this is where the magic happens
     currentPanel.webview.onDidReceiveMessage(msg => {
         //vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
         //sourcePanel = vscode.window.createWebviewPanel("Source", "Source Panel", vscode.ViewColumn.Three, { enableScripts : true } );
         //sourcePanel.webview.html = getSourceWebviewContent();
-        let docToOpenPath : string = "C:\\Users\\clairiky\\Work\\WOS\\PTVS\\examples\\pybind\\src\\MonteCarloPi.cpp";
+        let docToOpenPath : string = "C:\\Users\\perf\\projects\\examples\\pybind\\src\\MonteCarloPi.cpp";
         if (msg.command === "should_open") {
             // should be getting name of file to open from ${msg.text}
             // the command below doesn't work, it asks user for input on what file to open
@@ -87,31 +72,46 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(d3Extension); 
 
     let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
+        // Verify that the active document is a Python script
+        let textEditor = vscode.window.activeTextEditor;
+        let docName : string = "";
+        if (!textEditor) {
+            vscode.window.showErrorMessage("No document selected.");
+            return;
+        } else {
+            let doc = textEditor.document;
+            if (!doc || doc.languageId != "python") {
+              vscode.window.showErrorMessage("Please invoke this command from a Python file.");
+              return;
+            }
+            docName = doc.fileName;
+            //vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
+       }
 
        if (currentPanel) {
-         currentPanel.reveal(vscode.ViewColumn.Two);
+          currentPanel.reveal(vscode.ViewColumn.Two);
        } else {
-         currentPanel = vscode.window.createWebviewPanel("testType", "Testing Panel", vscode.ViewColumn.Two, { enableScripts : true } );
-
-         d3Extension.testOutput("Trying to output to channel");
-         currentPanel.onDidDispose(
-             () => { currentPanel = undefined; },
-             undefined,
-             context.subscriptions
-         );
-         currentPanel.webview.onDidReceiveMessage(msg => {
-             /*
-            let toDisplay = `Seems like I got a message ${msg.command}!, checking:\n`;
-            if (msg.command === "should_open") {
-                toDisplay += `\tShould be opening file "${msg.text}"`;
-            } else {
-                toDisplay += "\t*** Got a command without open directive";
-            }
-            vscode.window.showInformationMessage(toDisplay);
-            */
-           vscode.window.showInformationMessage("Testing message");
-         }, undefined, context.subscriptions);
+          currentPanel = vscode.window.createWebviewPanel("testType", "Testing Panel", vscode.ViewColumn.Two, { enableScripts : true } );
        }
+
+        d3Extension.testOutput("Trying to output to channel", docName); // <<--- more magic
+        currentPanel.onDidDispose(
+              () => { currentPanel = undefined; },
+              undefined,
+              context.subscriptions
+        );
+    //      currentPanel.webview.onDidReceiveMessage(msg => {
+    //          /*
+    //         let toDisplay = `Seems like I got a message ${msg.command}!, checking:\n`;
+    //         if (msg.command === "should_open") {
+    //             toDisplay += `\tShould be opening file "${msg.text}"`;
+    //         } else {
+    //             toDisplay += "\t*** Got a command without open directive";
+    //         }
+    //         vscode.window.showInformationMessage(toDisplay);
+    //         */
+    //        vscode.window.showInformationMessage("Testing message");
+    //      }, undefined, context.subscriptions);
     });
     context.subscriptions.push(createPanelDisposable);
 }

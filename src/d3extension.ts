@@ -6,8 +6,6 @@ import * as fs from 'fs';
 import * as os from 'os';
 import {getHtmlContent} from './extension';
 
-
-
 export class D3Extension
 {
     private _output : vscode.OutputChannel;
@@ -28,47 +26,25 @@ export class D3Extension
         console.log(`Created D3Extension instance, will be running from ${this._profilerBinPath}`);
     }
    
-    testOutput(message : string) : void {
+    testOutput(message : string, fname? : string) : void {
         this._status.text = "Profiler starting ... ";
         this._status.show();
         this._output.clear();
         let channel : vscode.OutputChannel = this._output;
         let errString : string = "";
 
-        channel.appendLine("Profiler starting...");
-        
-        //let p = cp.spawn(this._profilerBinPath, ['-p']);
-        /*
-        if (this._panel) {
-            this._panel.reveal(vscode.ViewColumn.Two);
-            this._panel.webview.html = getHtmlContent(this._rootPath);
-            //this._panel.webview.postMessage({ command : 'refactor'});
-            this._status.text = "Done!";
-            this._status.show();
-            console.log("Done sending command");
-        } else {
-            console.log("No panel to display");
+        if (!fname) {
+            vscode.window.showErrorMessage("Profiler needs a script name to run.");
+            return;
         }
-        */
-       let textEditor = vscode.window.activeTextEditor;
-       
-       if (!textEditor) {
-           vscode.window.showErrorMessage("No document selected.");
-           return;
-       } else {
-           let doc = textEditor.document;
-           if (!doc || doc.languageId != "python") {
-             vscode.window.showErrorMessage("Please invoke this command from a Python file.");
-             return;
-           }
-           vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
-           console.log(`this file is open now ${doc.fileName}`);
-  
-       }
 
-        let p = cp.spawn('dotnet', [this._profilerBinPath, '-d', os.tmpdir(), '-j', '--', 'C:\\Users\\clairiky\\anaconda3\\envs\\bare_vscode\\python.exe', textEditor.document.fileName]);
+        channel.appendLine("Profiler starting...");
 
-       p.stdout.on("data", (data : string | Buffer) : void => {
+        channel.appendLine(`------> Should be running profiler like: ${this._profilerBinPath} (on ${fname})`);
+        // TODO -- Can we pick up the interpreter from the python extension/user preferences/registry?
+        let p = cp.spawn('dotnet', [this._profilerBinPath, '-d', os.tmpdir(), '-j', '--', 'C:\\Users\\perf\\appdata\\local\\continuum\\anaconda3\\python.exe', fname]);
+
+        p.stdout.on("data", (data : string | Buffer) : void => {
            channel.append(data.toString());
            this._status.text = "Profiler running ..."; this._status.show();
        });
@@ -81,20 +57,17 @@ export class D3Extension
 
        p.on('exit', (exitCode : number) : void => {
            channel.appendLine("Profiler signaled completion!");
-           if (exitCode === 0) {          
-            if (this._panel) {
-                this._panel.reveal(vscode.ViewColumn.Two);
-                this._panel.webview.html = getHtmlContent(this._rootPath);
-                this._status.text = "Profiler Done!";
-                this._status.show();
-                console.log("Done sending command");
-              }
+           if (exitCode === 0) {
+             channel.append(`I should be showing results now`);
+            // if (this._panel) {
+            //     this._panel.reveal(vscode.ViewColumn.Two);
+            //     this._panel.webview.html = getHtmlContent(this._rootPath);
+            // }
+             this._status.text = "Profiler Done!"; this._status.show();
            } else {
-               vscode.window.showErrorMessage(`Error while driving profiler: ${errString}.`);
+             vscode.window.showErrorMessage(`Error while driving profiler: ${errString}.`);
            }
        });
-
-        // this._output.appendLine(`Received a message: ${message}.`);
     }
 
     dispose() : void {
