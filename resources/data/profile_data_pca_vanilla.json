@@ -1,0 +1,86 @@
+{
+    "total_time": 22.128,
+    "frames": {
+      "frames": [
+        {
+          "function": "Total",
+          "cpu_time": "7.034505",
+          "module": "[Unknown]",
+          "function_full": "[Unknown]",
+          "source_file": "[Unknown]",
+          "start_address": "[Unknown]"
+        }
+      ]
+    },
+    "cpu": [],
+
+    "module_attribution": [
+      {
+        "module": "mkl_intel_thread.dll",
+        "time": 9.64066,
+        "fraction": 30.44368858207367
+      },
+      {
+        "module": "_multiarray_umath.cp36-win_amd64.pyd",
+        "time": 7.03766,
+        "fraction": 22.223823823941157
+      },
+{
+    "module": "libiomp5md.dll",
+    "time": 5.40921,
+    "fraction": 17.081434747728753
+  },
+
+{
+    "module": "python36.dll",
+    "time": 2.34886,
+    "fraction": 7.417330593848301
+  },
+{
+    "module": "mtrand.cp36-win_amd64.pyd",
+    "time": 2.14829,
+    "fraction": 6.7839620673255805
+  },
+{
+    "module": "mkl_rt.dll",
+    "time": 1.97103,
+    "fraction": 6.224202856020714
+  },
+{
+    "module": "ucrtbase.dll",
+    "time": 1.45914,
+    "fraction": 4.60773471501401
+  },
+{
+    "module": "_flinalg.cp36-win_amd64.pyd",
+    "time": 1.19827,
+    "fraction": 3.783948268815767
+  },
+{
+    "module": "VCRUNTIME140.dll",
+    "time": 0.237164,
+    "fraction": 0.7489266252392387
+  },
+{
+    "module": "_flapack.cp36-win_amd64.pyd",
+    "time": 0.188334,
+    "fraction": 0.5947291622582128
+  },
+
+{
+    "module": "KERNELBASE.dll",
+    "time": 0.00968148,
+    "fraction": 0.030572591724381374
+  },
+{
+    "module": "doccer.py",
+    "time": 0.00958403,
+    "fraction": 0.030264859945403268
+  },
+{
+    "module": "<frozen importlib._bootstrap_external>",
+    "time": 0.00930417,
+    "fraction": 0.029381106064799746
+  }
+    ]
+  }
