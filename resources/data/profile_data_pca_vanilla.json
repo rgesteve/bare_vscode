@@ -3,12 +3,220 @@
     "frames": {
       "frames": [
         {
-          "function": "Total",
-          "cpu_time": "7.034505",
-          "module": "[Unknown]",
-          "function_full": "[Unknown]",
+            "function": "func@0x180071ad7",
+            "cpu_time": "7.06513",
+            "module": "mkl_intel_thread.dll",
+            "function_full": "func@0x180071ad7",
+            "source_file": "[Unknown]",
+            "start_address": "0x180071ad7"
+          },
+        {
+            "function": "__kmp_fork_barrier",
+            "cpu_time": "5.40921",
+            "module": "libiomp5md.dll",
+            "function_full": "__kmp_fork_barrier(int,int)",
+            "source_file": "kmp_barrier.cpp",
+            "start_address": "0x18003e0c0"
+          },
+        {
+            "function": "func@0x1801a0a10",
+            "cpu_time": "3.57908",
+            "module": "_multiarray_umath.cp36-win_amd64.pyd",
+            "function_full": "func@0x1801a0a10",
+            "source_file": "[Unknown]",
+            "start_address": "0x1801a0a10"
+          },
+        {
+            "function": "free_base",
+            "cpu_time": "1.43573",
+            "module": "ucrtbase.dll",
+            "function_full": "free_base",
+            "source_file": "[Unknown]",
+            "start_address": "0x18000f780"
+          },
+        {
+            "function": "func@0x180657700",
+            "cpu_time": "1.3393",
+            "module": "_multiarray_umath.cp36-win_amd64.pyd",
+            "function_full": "func@0x180657700",
+            "source_file": "[Unknown]",
+            "start_address": "0x180657700"
+          },
+        {
+            "function": "func@0x180088ce0",
+            "cpu_time": "1.20694",
+            "module": "mtrand.cp36-win_amd64.pyd",
+            "function_full": "func@0x180088ce0",
+            "source_file": "[Unknown]",
+            "start_address": "0x180088ce0"
+          },
+        {
+            "function": "func@0x1e1b05e0",
+            "cpu_time": "1.07913",
+            "module": "python36.dll",
+            "function_full": "func@0x1e1b05e0",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e1b05e0"
+          },
+        {
+            "function": "func@0x180065ddb",
+            "cpu_time": "1.0535",
+            "module": "mkl_intel_thread.dll",
+            "function_full": "func@0x180065ddb",
+            "source_file": "[Unknown]",
+            "start_address": "0x180065ddb"
+          },
+        {
+            "function": "dgetrf",
+            "cpu_time": "1.05033",
+            "module": "mkl_rt.dll",
+            "function_full": "dgetrf",
+            "source_file": "[Unknown]",
+            "start_address": "0x18023bd60"
+          },
+        {
+            "function": "func@0x1805c0d8d",
+            "cpu_time": "0.970465",
+            "module": "_multiarray_umath.cp36-win_amd64.pyd",
+            "function_full": "func@0x1805c0d8d",
+            "source_file": "[Unknown]",
+            "start_address": "0x1805c0d8d"
+          },
+        {
+            "function": "func@0x180011eb0",
+            "cpu_time": "0.960655",
+            "module": "_flinalg.cp36-win_amd64.pyd",
+            "function_full": "func@0x180011eb0",
+            "source_file": "[Unknown]",
+            "start_address": "0x180011eb0"
+          },
+        {
+            "function": "func@0x180019cb0",
+            "cpu_time": "0.703555",
+            "module": "mtrand.cp36-win_amd64.pyd",
+            "function_full": "func@0x180019cb0",
+            "source_file": "[Unknown]",
+            "start_address": "0x180019cb0"
+          },
+        {
+            "function": "func@0x180bcdfc4",
+            "cpu_time": "0.6922",
+            "module": "mkl_intel_thread.dll",
+            "function_full": "func@0x180bcdfc4",
+            "source_file": "[Unknown]",
+            "start_address": "0x180bcdfc4"
+          },
+        {
+            "function": "func@0x1e1afef0",
+            "cpu_time": "0.560047",
+            "module": "python36.dll",
+            "function_full": "func@0x1e1afef0",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e1afef0"
+          },
+        {
+            "function": "func@0x1800d4cf0",
+            "cpu_time": "0.384159",
+            "module": "mkl_rt.dll",
+            "function_full": "func@0x1800d4cf0",
+            "source_file": "[Unknown]",
+            "start_address": "0x1800d4cf0"
+          },
+        {
+            "function": "dorgqr",
+            "cpu_time": "0.366818",
+            "module": "mkl_rt.dll",
+            "function_full": "dorgqr",
+            "source_file": "[Unknown]",
+            "start_address": "0x1802ab560"
+          },
+        {
+            "function": "func@0x1805b7d5c",
+            "cpu_time": "0.3567",
+            "module": "_multiarray_umath.cp36-win_amd64.pyd",
+            "function_full": "func@0x1805b7d5c",
+            "source_file": "[Unknown]",
+            "start_address": "0x1805b7d5c"
+          },
+        {
+            "function": "func@0x180611501",
+            "cpu_time": "0.35624",
+            "module": "_multiarray_umath.cp36-win_amd64.pyd",
+            "function_full": "func@0x180611501",
+            "source_file": "[Unknown]",
+            "start_address": "0x180611501"
+          },
+        {
+            "function": "func@0x18000364f",
+            "cpu_time": "0.350747",
+            "module": "mkl_intel_thread.dll",
+            "function_full": "func@0x18000364f",
+            "source_file": "[Unknown]",
+            "start_address": "0x18000364f"
+          },
+        {
+            "function": "func@0x1e1b0840",
+            "cpu_time": "0.241912",
+            "module": "python36.dll",
+            "function_full": "func@0x1e1b0840",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e1b0840"
+          },
+        {
+            "function": "func@0x180088310",
+            "cpu_time": "0.237792",
+            "module": "mtrand.cp36-win_amd64.pyd",
+            "function_full": "func@0x180088310",
+            "source_file": "[Unknown]",
+            "start_address": "0x180088310"
+          },
+        {
+            "function": "func@0x180012fa0",
+            "cpu_time": "0.237615",
+            "module": "_flinalg.cp36-win_amd64.pyd",
+            "function_full": "func@0x180012fa0",
+            "source_file": "[Unknown]",
+            "start_address": "0x180012fa0"
+          },
+        {
+            "function": "Py_Main",
+            "cpu_time": "0.236883",
+            "module": "python36.dll",
+            "function_full": "Py_Main",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e07eba0"
+          },
+        {
+            "function": "func@0x1800eec60",
+            "cpu_time": "0.188334",
+            "module": "_flapack.cp36-win_amd64.pyd",
+            "function_full": "func@0x1800eec60",
+            "source_file": "[Unknown]",
+            "start_address": "0x1800eec60"
+          },
+        {
+            "function": "memcpy",
+            "cpu_time": "0.178941",
+            "module": "VCRUNTIME140.dll",
+            "function_full": "memcpy",
+            "source_file": "[Unknown]",
+            "start_address": "0x18000c330"
+          },
+        {
+            "function": "func@0x18008cffe",
+            "cpu_time": "0.174181",
+            "module": "mkl_intel_thread.dll",
+            "function_full": "func@0x18008cffe",
+            "source_file": "[Unknown]",
+            "start_address": "0x18008cffe"
+          },
+        {
+          "function": "func@0x1800b31b0",
+          "cpu_time": "0.16972",
+          "module": "mkl_rt.dll",
+          "function_full": "func@0x1800b31b0",
           "source_file": "[Unknown]",
-          "start_address": "[Unknown]"
+          "start_address": "0x1800b31b0"
         }
       ]
     },
