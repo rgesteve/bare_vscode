@@ -1,0 +1,116 @@
+{
+    "total_time": 3.251,
+    "frames": {
+      "frames": [
+        {
+          "function": "func@0x1e1b05e0",
+          "cpu_time": "1.80177",
+          "module": "python36.dll",
+          "function_full": "func@0x1e1b05e0",
+          "source_file": "[Unknown]",
+          "start_address": "0x1e1b05e0"
+        },
+        {
+            "function": "func@0x1e1afeef",
+            "cpu_time": "0.492519",
+            "module": "python36.dll",
+            "function_full": "func@0x1e1afeef",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e1afeef"
+        },
+        {
+            "function": "func@0x1800d4cf0",
+            "cpu_time": "0.409306",
+            "module": "mkl_rt.dll",
+            "function_full": "func@0x1800d4cf0",
+            "source_file": "[Unknown]",
+            "start_address": "0x1800d4cf0"
+        },
+        {
+            "function": "Py_Main",
+            "cpu_time": "0.257545",
+            "module": "python36.dll",
+            "function_full": "Py_Main",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e07eba0"
+        },
+        {
+            "function": "_validate_bytecode_header",
+            "cpu_time": "0.0490976",
+            "module": "<frozen importlib._bootstrap_external>",
+            "function_full": "_validate_bytecode_header",
+            "source_file": "<frozen importlib._bootstrap_external>",
+            "start_address": "0x1f738a108a0"
+        },
+        {
+            "function": "func@0x1e105880",
+            "cpu_time": "0.0296049",
+            "module": "python36.dll",
+            "function_full": "func@0x1e105880",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e105880"
+        },
+        {
+            "function": "PyObject_CallFunctionObjArgs",
+            "cpu_time": "0.0237704",
+            "module": "python36.dll",
+            "function_full": "PyObject_CallFunctionObjArgs",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e0e5660"
+        },
+        {
+            "function": "_signature_from_callable",
+            "cpu_time": "0.0196921",
+            "module": "inspect.py",
+            "function_full": "_signature_from_callable(obj, follow_wrapper_chains, skip_bound_arg, sigcls)",
+            "source_file": "inspect.py",
+            "start_address": "0x1f740e2f450"
+        },
+        {
+            "function": "func@0x1e132ad0",
+            "cpu_time": "0.0196905",
+            "module": "python36.dll",
+            "function_full": "func@0x1e132ad0",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e132ad0"
+        },
+        {
+            "function": "func@0x1e104da0",
+            "cpu_time": "0.019561",
+            "module": "python36.dll",
+            "function_full": "func@0x1e104da0",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e104da0"
+        },
+        {
+            "function": "PyObject_GetAttrString",
+            "cpu_time": "0.0194977",
+            "module": "python36.dll",
+            "function_full": "PyObject_GetAttrString",
+            "source_file": "[Unknown]",
+            "start_address": "0x1e134450"
+        },
+        {
+            "function": "memcpy",
+            "cpu_time": "0.0156898",
+            "module": "VCRUNTIME140.dll",
+            "function_full": "memcpy",
+            "source_file": "[Unknown]",
+            "start_address": "0x18000c330"
+        }
+      ]
+    },
+    "cpu": [],
+    "module_attribution": [
+      {
+        "module": "python36.dll",
+        "time": 2.718,
+        "fraction": 86.9
+      },
+      {
+        "module": "mkl_rt.dll",
+        "time": 0.409,
+        "fraction": 13.1
+      }
+    ]
+  }
