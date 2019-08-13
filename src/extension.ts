@@ -37,14 +37,16 @@ export function activate(context: vscode.ExtensionContext) {
     let extensionPath = context.extensionPath;
     let mediaPath = path.join(extensionPath, 'resources');
     let currentPanel : vscode.WebviewPanel | undefined = undefined;
+        /*
     let sourcePanel : vscode.WebviewPanel | undefined = undefined;
 
     currentPanel = vscode.window.createWebviewPanel("testType", "Profile summary", vscode.ViewColumn.Two, { enableScripts : true } );
-
     console.log(`Extension "callVTune" is now active, running from ${profilerDriverPath}.`);
     console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
 
     let d3Extension : d3x.D3Extension = new d3x.D3Extension(extensionPath, <string>(profilerDriverPath), currentPanel);
+    */
+    /*
     //d3Extension.testOutput("Trying to output to channel"); // <--- this is where the magic happens
     currentPanel.webview.onDidReceiveMessage(msg => {
         //vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!`);
@@ -64,12 +66,12 @@ export function activate(context: vscode.ExtensionContext) {
             });
 
         } else {
-            /* empty */
+            // empty 
         }
         // vscode.window.showInformationMessage(`Should've opened a file...`);
 
      }, undefined, context.subscriptions);
-    context.subscriptions.push(d3Extension); 
+     */
 
     let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
         // Verify that the active document is a Python script
@@ -88,34 +90,58 @@ export function activate(context: vscode.ExtensionContext) {
             //vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
        }
 
+       //currentPanel = vscode.window.createWebviewPanel("testType", "Profile summary", vscode.ViewColumn.Two, { enableScripts : true } );
+       console.log(`Extension "callVTune" is now active, running from ${profilerDriverPath}.`);
+       console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
+       let d3Extension : d3x.D3Extension | undefined = undefined;
+
        if (currentPanel) {
-          currentPanel.reveal(vscode.ViewColumn.Two);
+          currentPanel.reveal(vscode.ViewColumn.Two); // assumes a d3Extension already exists
        } else {
           currentPanel = vscode.window.createWebviewPanel("testType", "Testing Panel", vscode.ViewColumn.Two, { enableScripts : true } );
+          d3Extension = new d3x.D3Extension(extensionPath, <string>(profilerDriverPath), currentPanel);
+          context.subscriptions.push(d3Extension); 
+          if (d3Extension) {
+              d3Extension.testOutput("Trying to output to channel", docName); // <<--- more magic
+          }
        }
 
-        d3Extension.testOutput("Trying to output to channel", docName); // <<--- more magic
-        currentPanel.onDidDispose(
-              () => { currentPanel = undefined; },
+       currentPanel.onDidDispose(
+              () => { 
+                  currentPanel = undefined; 
+                  if (d3Extension) { d3Extension.dispose(); d3Extension = undefined; }
+              },
               undefined,
               context.subscriptions
         );
-    //      currentPanel.webview.onDidReceiveMessage(msg => {
-    //          /*
-    //         let toDisplay = `Seems like I got a message ${msg.command}!, checking:\n`;
-    //         if (msg.command === "should_open") {
-    //             toDisplay += `\tShould be opening file "${msg.text}"`;
-    //         } else {
-    //             toDisplay += "\t*** Got a command without open directive";
-    //         }
-    //         vscode.window.showInformationMessage(toDisplay);
-    //         */
-    //        vscode.window.showInformationMessage("Testing message");
-    //      }, undefined, context.subscriptions);
+
+        currentPanel.webview.onDidReceiveMessage(msg => {
+            vscode.window.showInformationMessage(`Seems like I got a message ${msg.command}!, checking...`);
+            /*
+            if (msg.command === "should_open") {
+                toDisplay += `\tShould be opening file "${msg.text}"`;
+            } else {
+                toDisplay += "\t*** Got a command without open directive";
+            }
+            vscode.window.showInformationMessage(toDisplay);
+            */
+         }, undefined, context.subscriptions);
     });
 
     let cmdMessaging = vscode.commands.registerCommand('extension.communicate', () => {
-        vscode.window.showInformationMessage("Should be communicating with panel");
+        vscode.window.showInformationMessage("Sending message to panel...");
+        if (currentPanel && currentPanel.webview) {
+            try {
+                let resourcePath = path.join(extensionPath, 'resources');
+                let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data_pca_daal.json"), "utf8");
+                let payload = JSON.parse(datajson);
+                currentPanel.webview.postMessage({ command: "newdata", payload: payload});
+            } catch (err) {
+                vscode.window.showErrorMessage("Some error sending new data to panel");
+            }
+        } else {
+            vscode.window.showErrorMessage("I was expecting the panel to be active at this point");
+        }
     });
 
     context.subscriptions.push(createPanelDisposable);

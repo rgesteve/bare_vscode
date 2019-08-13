@@ -1,6 +1,8 @@
   (function () {
       const vscode = acquireVsCodeApi();
       window.vscode = vscode;
+
+      /*
       const counter = document.getElementById("lines-of-code-counter");
       const commMsg = document.getElementById("latest-comm");
       const shouldDisplay = document.getElementById("container");
@@ -15,6 +17,7 @@
               });
           }
       }, 500);
+      */
 
       var pdataElem = document.getElementById("profileData");
       let profileData = undefined;
@@ -103,21 +106,52 @@
         console.log("----> couldn't parse contents of profiledata, or couldn't find data in the right format <-----------");
       }
 
-      /*
-            //  Handle a message inside the webview
-     document.getElementById("message").textContent = "hello";
-
       window.addEventListener('message', event => {
           const message = event.data; // the message data the host sent
-          //shouldDisplay.style.visibility = "visible";
-          document.getElementById("message").textContent = "testing";
-
-          counter.textContent = 10;
-          commMsg.textContent = "Just received a message at time [" + count + "]";
           console.log("This should be displayed in the developer tools if they're open");
+          if (!'command' in message) {
+              console.log("Got an unexpected command");
+              return;
+          }
 
+          switch(message.command) {
+              case 'newdata':
+                  let data = message.payload;
+                  if (! 'module_attribution' in data) {
+                      console.log(`Got new data, but not in the form I was expecting, keys: << ${Object.keys().join(",")} >>.`);
+                  } else {
+                    let modattrib = data['module_attribution'];
+                    let mods = [];
+                    let restfrac = 0;
+                    modattrib.forEach((element) => {
+                        console.log(`Reading from data: module: ${element.module}, fraction: ${element.fraction}.`);
+                        if (element.fraction > 1) {
+                            mods.push(Array(element.module, element.fraction));
+                        } else {
+                            restfrac += element.fraction;
+                        }
+                    });
+                    mods.push(Array('others', restfrac));
+                    chart.unload();
+                    chart.load({
+                        columns : mods,
+                        type: 'donut',
+                        tooltip: { show: true }
+                    });
+                  }
+                  break;
+              default:
+                  console.log(`Don't now how to handle command type: ${message.command}.`);
+                  return;
+          }
+
+          // should acknowledge if could display data
+          vscode.postMessage({
+            command: 'alert',
+            text: 'communicating with host'
+        });
       });
-      */
+
   })();
 
   function linkRenderer(params) {
