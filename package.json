@@ -12,7 +12,7 @@
     ],
     "activationEvents": [
         "onCommand:extension.testD3js",
-        "onCommand:extension.refactor"
+        "onCommand:extension.communicate"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -23,8 +23,8 @@
                 "category": "Python Profiler"
             },
             {
-                "command": "extension.refactor",
-                "title": "refactor",
+                "command": "extension.communicate",
+                "title": "Communicate with Panel",
                 "category": "Python Profiler"
             }
         ]

@@ -113,7 +113,13 @@ export function activate(context: vscode.ExtensionContext) {
     //        vscode.window.showInformationMessage("Testing message");
     //      }, undefined, context.subscriptions);
     });
+
+    let cmdMessaging = vscode.commands.registerCommand('extension.communicate', () => {
+        vscode.window.showInformationMessage("Should be communicating with panel");
+    });
+
     context.subscriptions.push(createPanelDisposable);
+    context.subscriptions.push(cmdMessaging);
 }
 
 // this method is called when your extension is deactivated
