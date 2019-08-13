@@ -33,6 +33,23 @@ export class D3Extension
         let channel : vscode.OutputChannel = this._output;
         let errString : string = "";
 
+        let completionHandler = (exitCode : number) : void => {
+            console.log("-----> Running completion handler <-----------");
+            channel.appendLine("Profiler signaled completion!");
+            if (exitCode === 0) {
+              channel.append(`I should be showing results now`);
+              if (this._panel) {
+                 channel.append("Generating html content...");
+                 this._panel.reveal(vscode.ViewColumn.Two);
+                 this._panel.webview.html = getHtmlContent(this._rootPath);
+             }
+              channel.append("Results should be showing now...");
+              this._status.text = "Profiler Done!"; this._status.show();
+            } else {
+              vscode.window.showErrorMessage(`Error while driving profiler: ${errString}.`);
+            }
+        };
+
         if (!fname) {
             vscode.window.showErrorMessage("Profiler needs a script name to run.");
             return;
@@ -41,6 +58,7 @@ export class D3Extension
         channel.appendLine("Profiler starting...");
 
         channel.appendLine(`------> Should be running profiler like: ${this._profilerBinPath} (on ${fname})`);
+        /*
         // TODO -- Can we pick up the interpreter from the python extension/user preferences/registry?
         let p = cp.spawn('dotnet', [this._profilerBinPath, '-d', os.tmpdir(), '-j', '--', 'C:\\Users\\perf\\appdata\\local\\continuum\\anaconda3\\python.exe', fname]);
 
@@ -55,6 +73,12 @@ export class D3Extension
            channel.append(`From driver: ${data.toString()}`);
        });
 
+       p.on('exit', completionHandler);
+       */
+        completionHandler(0);
+
+
+       /*
        p.on('exit', (exitCode : number) : void => {
            channel.appendLine("Profiler signaled completion!");
            if (exitCode === 0) {
@@ -70,7 +94,7 @@ export class D3Extension
              vscode.window.showErrorMessage(`Error while driving profiler: ${errString}.`);
            }
        });
-
+       */
     }
 
     dispose() : void {
