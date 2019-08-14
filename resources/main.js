@@ -13,53 +13,13 @@
         //let profileData = JSON.parse(document.getElementById("profileData").textContent);
         profileData = JSON.parse(pdataElem.textContent);
 
-        let moduleDistribution = profileData.module_attribution;
         let executionTime = profileData.total_time;
-        var modules = [];
-        var othersFraction = 0;
+        let totalTimeElem = document.getElementById("totalTime");
+        if (totalTime) {
+            totalTime.innerHTML = `<h2>Total execution time</h2><div class="execTime">${executionTime}</div>`;
+        }
 
-        moduleDistribution.forEach((element) => {
-            if (element.fraction > 1) {
-                modules.push(Array(element.module, element.fraction));
-            } else {
-                othersFraction += element.fraction;
-            }
-        });
-        modules.push(Array('others', othersFraction));
-
-        var time = ['x', 0];
-        var cpu = ['cpu', 0];
-
-        profileData.cpu.forEach((element) => { 
-           cpu.push(element);
-        });
-        
-        var i = 0;
-        profileData.cpu.forEach(() => {
-            i += executionTime / (cpu.length - 2);
-            //console.log(`i is ${i}`)
-            time.push( i.toFixed(3) );
-        });
-        console.log(`Time array length ${time.length}`);
-        console.log(`CPU array length ${cpu.length}`);
-
-        /*
-        // CPU utilization timeline chart
-        var chart = c3.generate({
-            bindto: '#timeline',
-            data: {
-                x:'x',
-                columns: [time, cpu],
-                type: 'area-spline'
-            },
-            axis: {
-                x: {
-                    padding: {left: 0},
-                    min: 0
-                }
-            }
-        });
-        */
+        let modules = parseModuleTimeAttribution(profileData);
 
         // Modules chart
         var chart = c3.generate({
@@ -91,7 +51,6 @@
 
       window.addEventListener('message', event => {
           const message = event.data; // the message data the host sent
-          console.log("This should be displayed in the developer tools if they're open");
           if (!'command' in message) {
               console.log("Got an unexpected command");
               return;
@@ -100,31 +59,27 @@
           switch(message.command) {
               case 'newdata':
                   let data = message.payload;
-                  if (! 'module_attribution' in data) {
-                      console.log(`Got new data, but not in the form I was expecting, keys: << ${Object.keys().join(",")} >>.`);
-                  } else {
-                    let modattrib = data['module_attribution'];
-                    let mods = [];
-                    let restfrac = 0;
-                    modattrib.forEach((element) => {
-                        console.log(`Reading from data: module: ${element.module}, fraction: ${element.fraction}.`);
-                        if (element.fraction > 1) {
-                            mods.push(Array(element.module, element.fraction));
-                        } else {
-                            restfrac += element.fraction;
-                        }
-                    });
-                    mods.push(Array('others', restfrac));
+                  try {
+
+                    let executionTime = data.total_time;
+                    let totalTimeElem = document.getElementById("totalTime");
+                    if (totalTime && executionTime) {
+                        totalTime.innerHTML = `<h2>Total execution time</h2><div class="execTime">${executionTime}</div>`;
+                    }
+            
+                    mods = parseModuleTimeAttribution(data);
                     chart.unload();
                     chart.load({
-                        columns : mods,
-                        type: 'donut',
-                        tooltip: { show: true }
+                            columns : mods,
+                            type: 'donut',
+                            tooltip: { show: true }
                     });
 
                     console.log(`Setting up the payload of the table:`);
                     gridOptions.api.setRowData(data.frames.frames);
                     console.log(`Done!`);
+                  } catch (err) {
+                        console.log(`Apparently there was some error updateing charts`);
                   }
                   break;
               default:
@@ -220,6 +175,25 @@ function onTextboxFilterChanged() {
     gridOptions.api.setQuickFilter(value);
 }
 
+function parseModuleTimeAttribution(jsonData) {
+    if (! 'module_attribution' in jsonData) {
+        throw new Error("Cannot parse data for module attribution");
+    }
+
+    let moduleDistribution = jsonData.module_attribution;
+    let modules = [];
+    let othersFraction = 0;
+
+    moduleDistribution.forEach((element) => {
+        if (element.fraction > 1) {
+            modules.push(Array(element.module, element.fraction));
+        } else {
+            othersFraction += element.fraction;
+        }
+    });
+    modules.push(Array('others', othersFraction));
+    return modules;
+}
 
 // setup the grid after the page has finished loading
 document.addEventListener('DOMContentLoaded', function() {
