@@ -98,7 +98,7 @@ export function activate(context: vscode.ExtensionContext) {
        if (currentPanel) {
           currentPanel.reveal(vscode.ViewColumn.Two); // assumes a d3Extension already exists
        } else {
-          currentPanel = vscode.window.createWebviewPanel("testType", "Testing Panel", vscode.ViewColumn.Two, { enableScripts : true } );
+          currentPanel = vscode.window.createWebviewPanel("testType", "Python profile", vscode.ViewColumn.Two, { enableScripts : true } );
           d3Extension = new d3x.D3Extension(extensionPath, <string>(profilerDriverPath), currentPanel);
           context.subscriptions.push(d3Extension); 
           if (d3Extension) {
