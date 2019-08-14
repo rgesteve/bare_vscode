@@ -130,7 +130,6 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let cmdMessaging = vscode.commands.registerCommand('extension.communicate', () => {
-        vscode.window.showInformationMessage("Sending message to panel...");
         if (currentPanel && currentPanel.webview && d3Extension) {
             try {
                 let resourcePath = path.join(extensionPath, 'resources');

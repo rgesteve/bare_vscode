@@ -33,10 +33,6 @@ export class D3Extension
         let channel : vscode.OutputChannel = this._output;
         let errString : string = "";
 
-        if (dataLoad) {
-            vscode.window.showInformationMessage("Got some data over here, expect change in webview");
-        }
-
         let completionHandler = (exitCode : number, payload? : any) : void => {
             console.log("-----> Running completion handler <-----------");
             channel.appendLine("Profiler signaled completion!");
@@ -47,7 +43,6 @@ export class D3Extension
                  this._panel.reveal(vscode.ViewColumn.Two);
 
                  if (payload) {
-                    vscode.window.showInformationMessage("Got some data over here, posting to the webview");
                     this._panel.webview.postMessage({ command: "newdata", payload: dataLoad});
                 } else {
                     this._panel.webview.html = getHtmlContent(this._rootPath);
