@@ -58,7 +58,7 @@ export class D3Extension
         channel.appendLine("Profiler starting...");
 
         channel.appendLine(`------> Should be running profiler like: ${this._profilerBinPath} (on ${fname})`);
-        /*
+
         // TODO -- Can we pick up the interpreter from the python extension/user preferences/registry?
         let p = cp.spawn('dotnet', [this._profilerBinPath, '-d', os.tmpdir(), '-j', '--', 'C:\\Users\\perf\\appdata\\local\\continuum\\anaconda3\\python.exe', fname]);
 
@@ -74,9 +74,8 @@ export class D3Extension
        });
 
        p.on('exit', completionHandler);
-       */
-        completionHandler(0);
 
+        // completionHandler(0);
 
        /*
        p.on('exit', (exitCode : number) : void => {
