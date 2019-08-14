@@ -26,7 +26,14 @@ To get started with this codebase it's useful to create a `node`-based developme
 (bare_vscode) > cd [PATH_TO_THIS_CLONE]
 (bare_vscode) > npm install
 ```
-6. Open Visual Studio Code (heretofore "vsc") and start working with the extension as described in the [official documentation](https://code.visualstudio.com/docs/extensions/overview)
+
+6. To build the contents of the webview, you'll need to run `webpack`:
+```
+(bare_vscode) > npx webpack
+```
+If you get some errors, you're probably using the wrong branch, please make sure that `webpack-cli` is in "package.json"
+
+7. Open Visual Studio Code (heretofore "vsc") and start working with the extension as described in the [official documentation](https://code.visualstudio.com/docs/extensions/overview)
 ```
 (bare_vscode) > code .
 ```
