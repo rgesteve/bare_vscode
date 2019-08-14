@@ -2,23 +2,6 @@
       const vscode = acquireVsCodeApi();
       window.vscode = vscode;
 
-      /*
-      const counter = document.getElementById("lines-of-code-counter");
-      const commMsg = document.getElementById("latest-comm");
-      const shouldDisplay = document.getElementById("container");
-      let count = 0;
-      setInterval( () => {
-          counter.textContent = count++;
-          if ((count % 5) === 0 && count < 10) {
-              console.log("Sending a message to the host...");
-              vscode.postMessage({
-                  command: 'alert',
-                  text: 'communicating with host'
-              });
-          }
-      }, 500);
-      */
-
       var pdataElem = document.getElementById("profileData");
       let profileData = undefined;
       if (!pdataElem) {
@@ -138,6 +121,10 @@
                         type: 'donut',
                         tooltip: { show: true }
                     });
+
+                    console.log(`Setting up the payload of the table:`);
+                    gridOptions.api.setRowData(data.frames.frames);
+                    console.log(`Done!`);
                   }
                   break;
               default:
@@ -253,7 +240,6 @@ document.addEventListener('DOMContentLoaded', function() {
         gridOptions.api.sizeColumnsToFit();
         gridOptions.api.setRowData(data.frames.frames);
         console.log(data.frames.frames);
-        //gridOptions.api.setRowData(JSON.parse(data));
     } catch (err) {
         console.log(`Couldn't parse text, output follows: {dataTxt}`);
     }
