@@ -73,10 +73,13 @@ export function activate(context: vscode.ExtensionContext) {
      }, undefined, context.subscriptions);
      */
 
+     // FIXME -- These should be better encapsulated, ideally, not visible at all
+    let docName : string = "";
+    let d3Extension : d3x.D3Extension | undefined = undefined;
+
     let createPanelDisposable = vscode.commands.registerCommand('extension.testD3js', () => {
         // Verify that the active document is a Python script
         let textEditor = vscode.window.activeTextEditor;
-        let docName : string = "";
         if (!textEditor) {
             vscode.window.showErrorMessage("No document selected.");
             return;
@@ -90,10 +93,8 @@ export function activate(context: vscode.ExtensionContext) {
             //vscode.window.showInformationMessage(`The texteditor has ${doc.fileName} open`);
        }
 
-       //currentPanel = vscode.window.createWebviewPanel("testType", "Profile summary", vscode.ViewColumn.Two, { enableScripts : true } );
        console.log(`Extension "callVTune" is now active, running from ${profilerDriverPath}.`);
        console.log(`Media path ${fs.existsSync(mediaPath)?"":"not "}found.`);
-       let d3Extension : d3x.D3Extension | undefined = undefined;
 
        if (currentPanel) {
           currentPanel.reveal(vscode.ViewColumn.Two); // assumes a d3Extension already exists
@@ -130,12 +131,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     let cmdMessaging = vscode.commands.registerCommand('extension.communicate', () => {
         vscode.window.showInformationMessage("Sending message to panel...");
-        if (currentPanel && currentPanel.webview) {
+        if (currentPanel && currentPanel.webview && d3Extension) {
             try {
                 let resourcePath = path.join(extensionPath, 'resources');
                 let datajson = fs.readFileSync(path.join(resourcePath, "/data/profile_data_pca_daal.json"), "utf8");
                 let payload = JSON.parse(datajson);
-                currentPanel.webview.postMessage({ command: "newdata", payload: payload});
+                d3Extension.testOutput("From communicate command", docName, payload);
             } catch (err) {
                 vscode.window.showErrorMessage("Some error sending new data to panel");
             }

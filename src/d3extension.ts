@@ -26,14 +26,18 @@ export class D3Extension
         console.log(`Created D3Extension instance, will be running from ${this._profilerBinPath}`);
     }
    
-    testOutput(message : string, fname? : string) : void {
+    testOutput(message : string, fname? : string, dataLoad? : any) : void {
         this._status.text = "Profiler starting ... ";
         this._status.show();
         this._output.clear();
         let channel : vscode.OutputChannel = this._output;
         let errString : string = "";
 
-        let completionHandler = (exitCode : number) : void => {
+        if (dataLoad) {
+            vscode.window.showInformationMessage("Got some data over here, expect change in webview");
+        }
+
+        let completionHandler = (exitCode : number, payload? : any) : void => {
             console.log("-----> Running completion handler <-----------");
             channel.appendLine("Profiler signaled completion!");
             if (exitCode === 0) {
@@ -41,7 +45,13 @@ export class D3Extension
               if (this._panel) {
                  channel.append("Generating html content...");
                  this._panel.reveal(vscode.ViewColumn.Two);
-                 this._panel.webview.html = getHtmlContent(this._rootPath);
+
+                 if (payload) {
+                    vscode.window.showInformationMessage("Got some data over here, posting to the webview");
+                    this._panel.webview.postMessage({ command: "newdata", payload: dataLoad});
+                } else {
+                    this._panel.webview.html = getHtmlContent(this._rootPath);
+                }
              }
               channel.append("Results should be showing now...");
               this._status.text = "Profiler Done!"; this._status.show();
@@ -73,27 +83,7 @@ export class D3Extension
            channel.append(`From driver: ${data.toString()}`);
        });
 
-       p.on('exit', completionHandler);
-
-        // completionHandler(0);
-
-       /*
-       p.on('exit', (exitCode : number) : void => {
-           channel.appendLine("Profiler signaled completion!");
-           if (exitCode === 0) {
-             channel.append(`I should be showing results now`);
-            if (this._panel) {
-                channel.append("Generating html content...");
-                this._panel.reveal(vscode.ViewColumn.Two);
-                this._panel.webview.html = getHtmlContent(this._rootPath);
-            }
-             channel.append("Results should be showing now...");
-             this._status.text = "Profiler Done!"; this._status.show();
-           } else {
-             vscode.window.showErrorMessage(`Error while driving profiler: ${errString}.`);
-           }
-       });
-       */
+       p.on('exit', (statusCode) => { completionHandler(statusCode, dataLoad) });
     }
 
     dispose() : void {
